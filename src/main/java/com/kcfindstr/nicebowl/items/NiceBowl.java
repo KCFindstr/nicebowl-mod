@@ -21,6 +21,7 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -70,6 +71,7 @@ public class NiceBowl extends ArmorItem {
         world.sendBlockUpdated(blockpos, blockstate, newBlockstate, 3);
       }
     }
+    context.getPlayer().playSound(SoundEvents.WOOL_PLACE, 1.0F, 1.0F);
     stack.setCount(stack.getCount() - 1);
     return ActionResultType.SUCCESS;
   }

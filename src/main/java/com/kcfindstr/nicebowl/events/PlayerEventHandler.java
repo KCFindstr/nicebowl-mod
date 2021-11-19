@@ -1,11 +1,9 @@
 package com.kcfindstr.nicebowl.events;
 
 import com.kcfindstr.nicebowl.items.ItemRegistry;
-import com.kcfindstr.nicebowl.items.NiceBowl;
 import com.kcfindstr.nicebowl.utils.Constants;
 import com.kcfindstr.nicebowl.utils.PlayerData;
 import com.kcfindstr.nicebowl.utils.PlayerUtils;
-import com.kcfindstr.nicebowl.utils.Utils;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;

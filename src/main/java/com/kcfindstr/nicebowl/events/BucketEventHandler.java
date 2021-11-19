@@ -9,7 +9,6 @@ import com.kcfindstr.nicebowl.utils.PlayerUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -47,6 +46,6 @@ public class BucketEventHandler {
     }
     event.setFilledBucket(itemStack);
     event.setResult(Result.ALLOW);
-    world.playSound(event.getPlayer(), pos, SoundEvents.BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+    event.getPlayer().playSound(SoundEvents.BUCKET_FILL, 1.0F, 1.0F);
   }
 }
