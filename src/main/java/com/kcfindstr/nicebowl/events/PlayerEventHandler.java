@@ -56,6 +56,9 @@ public class PlayerEventHandler {
     }
     ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
     ServerPlayerEntity thrower = player.getServer().getPlayerList().getPlayer(item.getThrower());
+    if (thrower == null) {
+      return;
+    }
     Utils.logInfo("Nicebowl thrown by " + thrower.getStringUUID() + " picked up by " + player.getStringUUID());
     if (thrower == null || (false && thrower.getUUID().equals(player.getUUID()))) {
       return;

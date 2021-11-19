@@ -17,12 +17,15 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "nicebowl:nicebowl"
-            ]
+            "item": "nicebowl:nicebowl"
           }
         ]
       }
     }
+  },
+  "rewards": {
+    "recipes": [
+      "nicebowl:nicebowl"
+    ]
   }
 }

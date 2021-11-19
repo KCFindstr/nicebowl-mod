@@ -12,14 +12,12 @@
   },
   "parent": "nicebowl:actions/nicebowl_overnight",
   "criteria": {
-    "has_nicebowl": {
+    "has_juice_bucket": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": [
-              "nicebowl:juice_bucket"
-            ]
+            "item": "nicebowl:juice_bucket"
           }
         ]
       }

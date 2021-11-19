@@ -1,7 +1,8 @@
 {
   "display": {
     "icon": {
-      "item": "nicebowl:nicebowl_used"
+      "item": "nicebowl:nicebowl",
+      "nbt": "{\"nicebowl:player_uid\":\"placeholder\",\"nicebowl:player_name\":\"奇怪\"}"
     },
     "title": {
       "translate": "advancement.nicebowl.send_nicebowl.title"
@@ -9,13 +10,20 @@
     "description": {
       "translate": "advancement.nicebowl.send_nicebowl.description"
     },
-    "frame": "challenge",
-    "hidden": true
+    "frame": "challenge"
   },
   "parent": "nicebowl:actions/nicebowl_overnight",
   "criteria": {
-    "nicebowl_automate": {
-      "trigger": "minecraft:impossible"
+    "send_nicebowl_automate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "nicebowl:nicebowl",
+            "nbt": "{\"tag\":\"impossible\"}"
+          }
+        ]
+      }
     }
   }
 }

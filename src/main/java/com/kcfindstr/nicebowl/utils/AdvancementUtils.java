@@ -13,8 +13,17 @@ public class AdvancementUtils {
 
   public static void grantAdvancement(ServerPlayerEntity player, ResourceLocation advancementLoc) {
     AdvancementManager manager = player.getServer().getAdvancements();
+    if (manager == null) {
+      return;
+    }
     Advancement advancement = manager.getAdvancement(advancementLoc);
+    if (advancement == null) {
+      return;
+    }
     PlayerAdvancements playerAdvancements = player.getAdvancements();
+    if (playerAdvancements == null) {
+      return;
+    }
     AdvancementProgress progress = playerAdvancements.getOrStartProgress(advancement);
     if (progress.isDone()) {
       return;

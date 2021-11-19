@@ -11,10 +11,18 @@
     },
     "frame": "challenge"
   },
-  "parent": "nicebowl:root",
+  "parent": "nicebowl:recipes/nicebowl",
   "criteria": {
-    "nicebowl_automate": {
-      "trigger": "minecraft:impossible"
+    "receive_nicebowl_automate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "nicebowl:nicebowl",
+            "nbt": "{\"tag\":\"impossible\"}"
+          }
+        ]
+      }
     }
   }
 }
