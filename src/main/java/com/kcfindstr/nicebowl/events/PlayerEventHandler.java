@@ -72,6 +72,6 @@ public class PlayerEventHandler {
       return;
     }
     AdvancementUtils.grantAdvancement(player, AdvancementUtils.RECEIVE_NICEBOWL);
-    // AdvancementUtils.grantAdvancement(thrower, AdvancementUtils.SEND_NICEBOWL);
+    AdvancementUtils.grantAdvancement(thrower, AdvancementUtils.SEND_NICEBOWL);
   }
 }

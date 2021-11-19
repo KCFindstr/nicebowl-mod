@@ -9,7 +9,8 @@
     "description": {
       "translate": "advancement.nicebowl.receive_nicebowl.description"
     },
-    "frame": "challenge"
+    "frame": "challenge",
+    "hidden": true
   },
   "parent": "nicebowl:recipes/nicebowl",
   "criteria": {
