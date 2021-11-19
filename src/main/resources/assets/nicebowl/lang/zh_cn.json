@@ -6,5 +6,11 @@
   "itemGroup.nicebowl_group": "蓝白碗",
   "tooltip.nicebowl.player":"盛着%s汁",
   "tooltip.juice_bucket.player":"盛着%s汁",
-  "tooltip.juice_bucket.none":"不明汁液"
+  "tooltip.juice_bucket.none":"不明汁液",
+  "advancement.nicebowl.root.title": "蓝白碗",
+  "advancement.nicebowl.root.description": "多功能工具",
+  "advancement.nicebowl.title": "你的下一个碗何必是碗",
+  "advancement.nicebowl.description": "获得蓝白碗",
+  "advancement.nicebowl_overnight.title": "灵感满溢的甜蜜创想",
+  "advancement.nicebowl_overnight.description": "穿着蓝白胖次入睡…醒来会发生什么呢"
 }

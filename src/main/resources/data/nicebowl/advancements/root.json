@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "nicebowl:nicebowl"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.root.title"
+    },
+    "description": {
+      "translate": "advancement.nicebowl.root.description"
+    },
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png"
+  },
+  "criteria": {
+    "impossible": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
