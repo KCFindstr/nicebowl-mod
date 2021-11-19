@@ -20,6 +20,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -60,15 +61,18 @@ public class NiceBowl extends ArmorItem {
     if (!block.canBeReplaced(blockstate, blockItemUseContext)) {
       return ActionResultType.FAIL;
     }
-    Block created = BlockRegistry.niceBowl.get();
-    BlockState newBlockstate = created.defaultBlockState();
+    PlayerData player = PlayerUtils.getPlayer(stack);
+    NiceBowlBlock created = BlockRegistry.niceBowl.get();
+    BlockState newBlockstate = created.getBlockState(PlayerUtils.isValid(player) ? 1 : 0);
     world.setBlockAndUpdate(blockpos, newBlockstate);
     if (!world.isClientSide) {
-      PlayerData player = PlayerUtils.getPlayer(stack);
       if (PlayerUtils.isValid(player)) {
-        NiceBowlTileEntity entity = (NiceBowlTileEntity) world.getBlockEntity(blockpos);
-        entity.setPlayer(player);
-        world.sendBlockUpdated(blockpos, blockstate, newBlockstate, 3);
+        TileEntity tileEntity = world.getBlockEntity(blockpos);
+        if (tileEntity instanceof NiceBowlTileEntity) {
+          NiceBowlTileEntity entity = (NiceBowlTileEntity) tileEntity;
+          entity.setPlayer(player);
+          world.sendBlockUpdated(blockpos, blockstate, newBlockstate, 3);
+        }
       }
     }
     context.getPlayer().playSound(SoundEvents.WOOL_PLACE, 1.0F, 1.0F);

@@ -41,6 +41,7 @@ public class NiceBowlMod {
   private void clientSetup(final FMLClientSetupEvent event) {
     RenderTypeLookup.setRenderLayer(FluidRegistry.juice.get(), RenderType.translucent());
     RenderTypeLookup.setRenderLayer(FluidRegistry.juiceFlowing.get(), RenderType.translucent());
+    RenderTypeLookup.setRenderLayer(BlockRegistry.niceBowl.get(), RenderType.translucent());
   }
 
   // You can use SubscribeEvent and let the Event Bus discover methods to call

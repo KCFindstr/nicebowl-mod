@@ -15,8 +15,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -30,6 +33,7 @@ import net.minecraft.world.World;
 
 public class NiceBowlBlock extends Block {
   private static final VoxelShape shape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+  public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 1);
 
   public static ITextComponent getHoverText(CompoundNBT tag) {
     PlayerData player = PlayerUtils.getPlayer(tag);
@@ -54,6 +58,28 @@ public class NiceBowlBlock extends Block {
 
   public NiceBowlBlock() {
     super(Properties.of(Material.WOOL).harvestLevel(1).strength(1).noOcclusion().sound(SoundType.WOOL));
+    this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0));
+  }
+
+  public BlockState getBlockState(int waterLevel) {
+    BlockState blockState = this.defaultBlockState();
+    return blockState.setValue(LEVEL, waterLevel <= 0 ? 0 : 1);
+  }
+
+  @Override
+  public BlockState getStateForPlacement(BlockItemUseContext context) {
+    TileEntity tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
+    if (tileEntity instanceof NiceBowlTileEntity) {
+      NiceBowlTileEntity bowl = (NiceBowlTileEntity) tileEntity;
+      return getBlockState(bowl.hasPlayer() ? 1 : 0);
+    }
+    return super.getStateForPlacement(context);
+  }
+
+  @Override
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    builder.add(LEVEL);
+    super.createBlockStateDefinition(builder);
   }
 
   @Override
@@ -66,7 +92,6 @@ public class NiceBowlBlock extends Block {
     return true;
   }
 
-  @Nullable
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
     return new NiceBowlTileEntity();
@@ -76,9 +101,12 @@ public class NiceBowlBlock extends Block {
   public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
     super.playerWillDestroy(world, pos, state, player);
     if (!world.isClientSide) {
-      NiceBowlTileEntity tileEntity = (NiceBowlTileEntity) world.getBlockEntity(pos);
       ItemStack drops = new ItemStack(ItemRegistry.niceBowl.get(), 1);
-      PlayerUtils.copyPlayerData(tileEntity, drops);
+      TileEntity entity = world.getBlockEntity(pos);
+      if (entity instanceof NiceBowlTileEntity) {
+        NiceBowlTileEntity bowl = (NiceBowlTileEntity) entity;
+        PlayerUtils.copyPlayerData(bowl, drops);
+      }
       InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), drops);
     }
   }

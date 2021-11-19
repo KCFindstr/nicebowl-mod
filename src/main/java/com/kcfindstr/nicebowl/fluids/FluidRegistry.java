@@ -25,7 +25,7 @@ public class FluidRegistry {
         () -> juice.get(), () -> juiceFlowing.get(),
         FluidAttributes
           .builder(FLUID_STILL, FLUID_FLOW)
-          .color(0x7fff99d8)
+          .color(Constants.JUICE_COLOR_TINT)
           .viscosity(2000))
       .bucket(ItemRegistry.juiceBucket)
       .block(BlockRegistry.juice);
