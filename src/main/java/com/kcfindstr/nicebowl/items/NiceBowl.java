@@ -81,7 +81,9 @@ public class NiceBowl extends ArmorItem {
   
   @Override
   public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-    String path = "nicebowl:textures/models/armor/nicebowl_layer_" + (slot == EquipmentSlotType.LEGS ? "2" : "1") + ".png";
+    String layer = slot == EquipmentSlotType.LEGS ? "2" : "1";
+    String name = PlayerUtils.isValid(PlayerUtils.getPlayer(stack)) ? "nicebowl_used_layer_" : "nicebowl_layer_";
+    String path = "nicebowl:textures/models/armor/" + name + layer + ".png";
     return path;
   }
 }
