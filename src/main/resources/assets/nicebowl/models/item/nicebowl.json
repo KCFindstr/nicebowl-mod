@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "nicebowl:item/nicebowl"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "nicebowl:used": 1
+      },
+      "model": "nicebowl:item/nicebowl_used"
+    }
+  ]
+}

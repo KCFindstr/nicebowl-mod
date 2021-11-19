@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "W",
+    "B"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:light_blue_wool"
+    },
+    "W": {
+      "item": "minecraft:white_wool"
+    },
+    "B": {
+      "item": "minecraft:bowl"
+    }
+  },
+  "result": {
+    "item": "nicebowl:nicebowl"
+  }
+}

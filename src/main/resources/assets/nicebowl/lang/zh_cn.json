@@ -1,0 +1,10 @@
+{
+  "block.nicebowl.nicebowl": "蓝白碗",
+  "item.nicebowl.nicebowl": "蓝白碗",
+  "item.nicebowl.nicebowl_head": "蓝白碗",
+  "item.nicebowl.juice_bucket":"桶",
+  "itemGroup.nicebowl_group": "蓝白碗",
+  "tooltip.nicebowl.player":"盛着%s汁",
+  "tooltip.juice_bucket.player":"盛着%s汁",
+  "tooltip.juice_bucket.none":"不明汁液"
+}
