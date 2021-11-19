@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.kcfindstr.nicebowl.fluids.FluidRegistry;
+import com.kcfindstr.nicebowl.utils.PlayerData;
 import com.kcfindstr.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -29,11 +30,11 @@ public class JuiceBucket extends BucketItem {
   public void appendHoverText(ItemStack itemStack, @Nullable World world, List<ITextComponent> text, ITooltipFlag tooltip) {
     super.appendHoverText(itemStack, world, text, tooltip);
     TranslationTextComponent txt;
-    String player = PlayerUtils.getPlayer(itemStack);
-    if (player == null) {
-      txt = new TranslationTextComponent("tooltip.juice_bucket.none");
+    PlayerData player = PlayerUtils.getPlayer(itemStack);
+    if (PlayerUtils.isValid(player)) {
+      txt = new TranslationTextComponent("tooltip.juice_bucket.player", player.name);
     } else {
-      txt = new TranslationTextComponent("tooltip.juice_bucket.player", player);
+      txt = new TranslationTextComponent("tooltip.juice_bucket.none");
     }
     txt.setStyle(Style.EMPTY.withColor(TextFormatting.LIGHT_PURPLE));
     text.add(txt);

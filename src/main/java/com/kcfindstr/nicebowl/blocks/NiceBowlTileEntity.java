@@ -2,7 +2,7 @@ package com.kcfindstr.nicebowl.blocks;
 
 import javax.annotation.Nullable;
 
-import com.kcfindstr.nicebowl.utils.Constants;
+import com.kcfindstr.nicebowl.utils.PlayerData;
 import com.kcfindstr.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.block.BlockState;
@@ -12,31 +12,31 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 
 public class NiceBowlTileEntity extends TileEntity {
-  private String player = "";
+  private PlayerData player;
 
   public NiceBowlTileEntity() {
     super(TileEntityRegistry.niceBowlTileEntity.get());
   }
 
-  public void setPlayer(String player) {
-    this.player = player;
+  public void setPlayer(PlayerData player) {
+    this.player = PlayerUtils.isValid(player) ? player : null;
     setChanged();
   }
 
-  public String getPlayer() {
+  public PlayerData getPlayer() {
     return player;
   }
 
   public boolean hasPlayer() {
-    return !PlayerUtils.isNullOrEmpty(player);
+    return PlayerUtils.isValid(player);
   }
 
   public String getPlayerName() {
-    return player;
+    return player.name;
   }
 
   private void loadPlayer(CompoundNBT tag) {
-    player = tag.getString(Constants.NBT_KEY_PLAYER);
+    setPlayer(PlayerUtils.getPlayer(tag));
   }
   
   @Nullable
@@ -70,7 +70,7 @@ public class NiceBowlTileEntity extends TileEntity {
 
   @Override
   public CompoundNBT save(CompoundNBT tag) {
-    tag.putString(Constants.NBT_KEY_PLAYER, player);
+    PlayerUtils.setPlayer(tag, player);
     return super.save(tag);
   }
 }

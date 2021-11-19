@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.kcfindstr.nicebowl.items.ItemRegistry;
+import com.kcfindstr.nicebowl.utils.PlayerData;
 import com.kcfindstr.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.block.Block;
@@ -31,9 +32,9 @@ public class NiceBowlBlock extends Block {
   private static final VoxelShape shape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
 
   public static ITextComponent getHoverText(CompoundNBT tag) {
-    String player = PlayerUtils.getPlayer(tag);
-    if (player != null) {
-      TranslationTextComponent txt = new TranslationTextComponent("tooltip.nicebowl.player", player);
+    PlayerData player = PlayerUtils.getPlayer(tag);
+    if (PlayerUtils.isValid(player)) {
+      TranslationTextComponent txt = new TranslationTextComponent("tooltip.nicebowl.player", player.name);
       txt.setStyle(Style.EMPTY.withColor(TextFormatting.LIGHT_PURPLE));
       return txt;
     }

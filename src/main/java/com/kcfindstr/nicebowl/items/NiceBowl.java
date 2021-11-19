@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.kcfindstr.nicebowl.blocks.BlockRegistry;
 import com.kcfindstr.nicebowl.blocks.NiceBowlBlock;
 import com.kcfindstr.nicebowl.blocks.NiceBowlTileEntity;
+import com.kcfindstr.nicebowl.utils.PlayerData;
 import com.kcfindstr.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.block.Block;
@@ -59,12 +60,14 @@ public class NiceBowl extends ArmorItem {
       return ActionResultType.FAIL;
     }
     Block created = BlockRegistry.niceBowl.get();
-    world.setBlockAndUpdate(blockpos, created.defaultBlockState());
-    String player = PlayerUtils.getPlayer(stack);
+    BlockState newBlockstate = created.defaultBlockState();
+    world.setBlockAndUpdate(blockpos, newBlockstate);
     if (!world.isClientSide) {
-      if (player != null) {
+      PlayerData player = PlayerUtils.getPlayer(stack);
+      if (PlayerUtils.isValid(player)) {
         NiceBowlTileEntity entity = (NiceBowlTileEntity) world.getBlockEntity(blockpos);
         entity.setPlayer(player);
+        world.sendBlockUpdated(blockpos, blockstate, newBlockstate, 3);
       }
     }
     stack.setCount(stack.getCount() - 1);

@@ -41,7 +41,7 @@ public class BucketEventHandler {
     ItemStack itemStack = new ItemStack(ItemRegistry.juiceBucket.get());
     if (!world.isClientSide) {
       PlayerUtils.copyPlayerData(tileEntity, itemStack);
-      tileEntity.setPlayer("");
+      tileEntity.setPlayer(null);
       event.getPlayer().inventory.setChanged();
       world.sendBlockUpdated(pos, blockState, blockState, 3);
     }
