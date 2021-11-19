@@ -23,6 +23,7 @@ public class NiceBowlTileEntity extends TileEntity {
     setChanged();
   }
 
+  @Nullable
   public PlayerData getPlayer() {
     return player;
   }

@@ -9,7 +9,7 @@
     "description": {
       "translate": "advancement.nicebowl.root.description"
     },
-    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png"
+    "background": "nicebowl:textures/gui/advancements/background.png"
   },
   "criteria": {
     "impossible": {

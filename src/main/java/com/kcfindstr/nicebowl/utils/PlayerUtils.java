@@ -1,5 +1,7 @@
 package com.kcfindstr.nicebowl.utils;
 
+import javax.annotation.Nullable;
+
 import com.kcfindstr.nicebowl.blocks.NiceBowlTileEntity;
 
 import net.minecraft.item.ItemStack;
@@ -38,11 +40,13 @@ public class PlayerUtils {
     entity.setPlayer(player);
   }
 
+  @Nullable
   public static PlayerData getPlayer(CompoundNBT tag) {
     PlayerData ret = new PlayerData(tag);
     return ret.isValid() ? ret : null;
   }
 
+  @Nullable
   public static PlayerData getPlayer(ItemStack stack) {
     if (!stack.hasTag()) {
       return null;

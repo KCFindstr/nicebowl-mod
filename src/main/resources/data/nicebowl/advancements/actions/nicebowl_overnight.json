@@ -4,12 +4,11 @@
       "item": "nicebowl:nicebowl"
     },
     "title": {
-      "translate": "advancement.nicebowl_overnight.title"
+      "translate": "advancement.nicebowl.nicebowl_overnight.title"
     },
     "description": {
-      "translate": "advancement.nicebowl_overnight.description"
-    },
-    "frame": "task"
+      "translate": "advancement.nicebowl.nicebowl_overnight.description"
+    }
   },
   "parent": "nicebowl:recipes/nicebowl",
   "criteria": {
@@ -33,10 +32,5 @@
         ]
       }
     }
-  },
-  "requirements": [
-    [
-      "sleep_with_nicebowl"
-    ]
-  ]
+  }
 }

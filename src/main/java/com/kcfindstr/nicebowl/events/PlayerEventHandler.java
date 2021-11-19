@@ -1,13 +1,19 @@
 package com.kcfindstr.nicebowl.events;
 
 import com.kcfindstr.nicebowl.items.ItemRegistry;
+import com.kcfindstr.nicebowl.items.NiceBowl;
+import com.kcfindstr.nicebowl.utils.AdvancementUtils;
 import com.kcfindstr.nicebowl.utils.Constants;
 import com.kcfindstr.nicebowl.utils.PlayerData;
 import com.kcfindstr.nicebowl.utils.PlayerUtils;
+import com.kcfindstr.nicebowl.utils.Utils;
 
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -33,5 +39,36 @@ public class PlayerEventHandler {
       PlayerUtils.setPlayer(itemStack, playerData);
       player.inventory.setChanged();
     }
+  }
+
+  @SubscribeEvent
+  public static void onItemPickup(EntityItemPickupEvent event) {
+    if (event.getEntity().level.isClientSide || !(event.getPlayer() instanceof ServerPlayerEntity)) {
+      return;
+    }
+    ItemEntity item = event.getItem();
+    if (item == null) {
+      return;
+    }
+    ItemStack itemStack = item.getItem();
+    if (!(itemStack.getItem() instanceof NiceBowl)) {
+      return;
+    }
+    ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+    ServerPlayerEntity thrower = player.getServer().getPlayerList().getPlayer(item.getThrower());
+    Utils.logInfo("Nicebowl thrown by " + thrower.getStringUUID() + " picked up by " + player.getStringUUID());
+    if (thrower == null || (false && thrower.getUUID().equals(player.getUUID()))) {
+      return;
+    }
+    PlayerData itemOwner = PlayerUtils.getPlayer(itemStack);
+    if (!PlayerUtils.isValid(itemOwner)) {
+      return;
+    }
+    Utils.logInfo("Nicebowl is from " + itemOwner.uid);
+    if (!itemOwner.uid.equals(thrower.getStringUUID())) {
+      return;
+    }
+    AdvancementUtils.grantAdvancement(player, AdvancementUtils.RECEIVE_NICEBOWL);
+    // AdvancementUtils.grantAdvancement(thrower, AdvancementUtils.SEND_NICEBOWL);
   }
 }

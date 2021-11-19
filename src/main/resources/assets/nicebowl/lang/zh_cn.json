@@ -9,8 +9,16 @@
   "tooltip.juice_bucket.none":"不明汁液",
   "advancement.nicebowl.root.title": "蓝白碗",
   "advancement.nicebowl.root.description": "多功能工具",
-  "advancement.nicebowl.title": "你的下一个碗何必是碗",
-  "advancement.nicebowl.description": "获得蓝白碗",
-  "advancement.nicebowl_overnight.title": "灵感满溢的甜蜜创想",
-  "advancement.nicebowl_overnight.description": "穿着蓝白胖次入睡…醒来会发生什么呢"
+  "advancement.nicebowl.nicebowl.title": "你的下一个碗何必是碗",
+  "advancement.nicebowl.nicebowl.description": "获得蓝白碗",
+  "advancement.nicebowl.nicebowl_head.title": "SOX",
+  "advancement.nicebowl.nicebowl_head.description": "把蓝白碗穿在头上",
+  "advancement.nicebowl.send_nicebowl.title": "珈百璃",
+  "advancement.nicebowl.send_nicebowl.description": "将蓝白碗（意外？）赠予他人",
+  "advancement.nicebowl.receive_nicebowl.title": "爱岛模式",
+  "advancement.nicebowl.receive_nicebowl.description": "获得他人赠送的蓝白碗",
+  "advancement.nicebowl.juice_bucket.title": "",
+  "advancement.nicebowl.juice_bucket.description": "获得一桶奇怪的液体",
+  "advancement.nicebowl.nicebowl_overnight.title": "灵感满溢的甜蜜创想",
+  "advancement.nicebowl.nicebowl_overnight.description": "穿着蓝白胖次入睡…醒来会发生什么呢"
 }

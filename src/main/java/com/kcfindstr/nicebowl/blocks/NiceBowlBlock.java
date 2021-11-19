@@ -35,6 +35,7 @@ public class NiceBowlBlock extends Block {
   private static final VoxelShape shape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
   public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 1);
 
+  @Nullable
   public static ITextComponent getHoverText(CompoundNBT tag) {
     PlayerData player = PlayerUtils.getPlayer(tag);
     if (PlayerUtils.isValid(player)) {

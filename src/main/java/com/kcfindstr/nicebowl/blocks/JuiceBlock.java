@@ -26,7 +26,6 @@ public class JuiceBlock extends FlowingFluidBlock {
     return true;
   }
 
-  @Nullable
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
     return new NiceBowlTileEntity();

@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "nicebowl:nicebowl"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.receive_nicebowl.title"
+    },
+    "description": {
+      "translate": "advancement.nicebowl.receive_nicebowl.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "nicebowl:root",
+  "criteria": {
+    "nicebowl_automate": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
