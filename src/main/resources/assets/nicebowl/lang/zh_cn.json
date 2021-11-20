@@ -1,5 +1,8 @@
 {
-  "block.nicebowl.nicebowl": "蓝白碗",
+  "block.nicebowl.nicebowl_block": "蓝白碗",
+  "block.nicebowl.juice_block": "汁液",
+  "fluid.nicebowl.juice": "汁液",
+  "fluid.nicebowl.juice_flow": "汁液",
   "item.nicebowl.nicebowl": "蓝白碗",
   "item.nicebowl.nicebowl_head": "蓝白碗",
   "item.nicebowl.juice_bucket":"桶",

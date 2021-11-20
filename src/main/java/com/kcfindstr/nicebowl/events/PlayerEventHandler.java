@@ -29,10 +29,8 @@ public class PlayerEventHandler {
     if (player.level.isClientSide) {
       return;
     }
-    if (event.wakeImmediately()) {
-      return;
-    }
-    boolean successfulSleep = player.level.getDayTime() == 24000;
+    Utils.logInfo(player.getDisplayName().getString() + " wakes up, day time is " + player.level.getDayTime());
+    boolean successfulSleep = player.level.getDayTime() == 24000 || player.level.getDayTime() <= 20;
     if (!successfulSleep) {
       return;
     }

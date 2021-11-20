@@ -1,5 +1,8 @@
 {
   "block.nicebowl.nicebowl": "NiceBowl",
+  "block.nicebowl.juice_block": "Juice",
+  "fluid.nicebowl.juice": "Juice",
+  "fluid.nicebowl.juice_flow": "Juice",
   "item.nicebowl.nicebowl": "NiceBowl",
   "item.nicebowl.nicebowl_head": "NiceBowl",
   "item.nicebowl.juice_bucket":"Bucket",
