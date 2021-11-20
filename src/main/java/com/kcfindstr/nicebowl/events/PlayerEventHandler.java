@@ -8,11 +8,14 @@ import com.kcfindstr.nicebowl.utils.PlayerData;
 import com.kcfindstr.nicebowl.utils.PlayerUtils;
 import com.kcfindstr.nicebowl.utils.Utils;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -73,5 +76,32 @@ public class PlayerEventHandler {
     }
     AdvancementUtils.grantAdvancement(player, AdvancementUtils.RECEIVE_NICEBOWL);
     AdvancementUtils.grantAdvancement(thrower, AdvancementUtils.SEND_NICEBOWL);
+  }
+
+  @SubscribeEvent
+  public static void onLivingHurt(LivingHurtEvent event) {
+    LivingEntity entity = event.getEntityLiving();
+    if (entity == null || entity.level.isClientSide) {
+      return;
+    }
+    DamageSource source = event.getSource();
+    if (source == null || !source.isProjectile()) {
+      return;
+    }
+    int niceBowlCount = 0;
+    if (entity.getItemBySlot(EquipmentSlotType.HEAD).getItem() instanceof NiceBowl) {
+      niceBowlCount++;
+    }
+    if (entity.getItemBySlot(EquipmentSlotType.LEGS).getItem() instanceof NiceBowl) {
+      niceBowlCount++;
+    }
+    if (niceBowlCount >= 2) {
+      event.setAmount(0);
+      if (entity instanceof ServerPlayerEntity) {
+        ServerPlayerEntity player = (ServerPlayerEntity) entity;
+        AdvancementUtils.grantAdvancement(player, AdvancementUtils.BLOCK_PROJECTILE);
+      }
+      return;
+    }
   }
 }

@@ -1,15 +1,15 @@
 {
   "display": {
     "icon": {
-      "item": "nicebowl:nicebowl"
+      "item": "minecraft:arrow"
     },
     "title": {
-      "translate": "advancement.nicebowl.receive_nicebowl.title"
+      "translate": "advancement.nicebowl.block_projectile.title"
     },
     "description": {
-      "translate": "advancement.nicebowl.receive_nicebowl.description"
+      "translate": "advancement.nicebowl.block_projectile.description"
     },
-    "frame": "challenge"
+    "frame": "task"
   },
   "parent": "nicebowl:recipes/nicebowl",
   "criteria": {

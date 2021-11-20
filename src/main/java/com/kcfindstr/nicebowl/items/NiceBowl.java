@@ -39,6 +39,11 @@ public class NiceBowl extends ArmorItem {
   }
 
   @Override
+  public boolean isDamageable(ItemStack stack) {
+    return false;
+  }
+
+  @Override
   public void appendHoverText(ItemStack itemStack, @Nullable World world, List<ITextComponent> text, ITooltipFlag tooltip) {
     NiceBowlBlock.addHoverText(itemStack, text);
     super.appendHoverText(itemStack, world, text, tooltip);

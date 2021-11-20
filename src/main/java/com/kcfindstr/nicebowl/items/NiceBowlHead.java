@@ -4,8 +4,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 public class NiceBowlHead extends NiceBowl {
   public NiceBowlHead() {
-    super(NicebowlArmorMaterial.NICEBOWL_HEAD, EquipmentSlotType.HEAD, new Properties()
-      .tab(ItemRegistry.itemGroup)
+    super(NicebowlArmorMaterial.NICEBOWL, EquipmentSlotType.HEAD, new Properties()
       .setNoRepair());
   }
 }

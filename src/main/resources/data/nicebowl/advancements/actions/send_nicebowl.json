@@ -10,20 +10,13 @@
     "description": {
       "translate": "advancement.nicebowl.send_nicebowl.description"
     },
-    "frame": "challenge"
+    "frame": "challenge",
+    "hidden": true
   },
   "parent": "nicebowl:actions/nicebowl_overnight",
   "criteria": {
-    "send_nicebowl_automate": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "nicebowl:nicebowl",
-            "nbt": "{\"tag\":\"impossible\"}"
-          }
-        ]
-      }
+    "nicebowl_automate": {
+      "trigger": "minecraft:impossible"
     }
   }
 }

@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 public class AdvancementUtils {
   public static final ResourceLocation RECEIVE_NICEBOWL = new ResourceLocation(Constants.MOD_ID, "actions/receive_nicebowl");
   public static final ResourceLocation SEND_NICEBOWL = new ResourceLocation(Constants.MOD_ID, "actions/send_nicebowl");
+  public static final ResourceLocation BLOCK_PROJECTILE = new ResourceLocation(Constants.MOD_ID, "actions/block_projectile");
 
   public static void grantAdvancement(ServerPlayerEntity player, ResourceLocation advancementLoc) {
     AdvancementManager manager = player.getServer().getAdvancements();
