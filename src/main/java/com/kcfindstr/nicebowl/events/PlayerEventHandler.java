@@ -30,7 +30,7 @@ public class PlayerEventHandler {
       return;
     }
     Utils.logInfo(player.getDisplayName().getString() + " wakes up, day time is " + player.level.getDayTime());
-    boolean successfulSleep = player.level.getDayTime() == 24000 || player.level.getDayTime() <= 20;
+    boolean successfulSleep = player.level.getDayTime() >= 24000 || player.level.getDayTime() <= 20;
     if (!successfulSleep) {
       return;
     }
@@ -61,7 +61,7 @@ public class PlayerEventHandler {
       return;
     }
     Utils.logInfo("Nicebowl thrown by " + thrower.getStringUUID() + " picked up by " + player.getStringUUID());
-    if (thrower == null || thrower.getUUID().equals(player.getUUID())) {
+    if (thrower.getUUID().equals(player.getUUID())) {
       return;
     }
     PlayerData itemOwner = PlayerUtils.getPlayer(itemStack);
