@@ -5,7 +5,7 @@
   "item.nicebowl.juice_bucket":"桶",
   "itemGroup.nicebowl_group": "蓝白碗",
   "tooltip.nicebowl.player":"盛着%s汁",
-  "tooltip.juice_bucket.player":"盛着%s汁",
+  "tooltip.juice_bucket.player":"%s汁",
   "tooltip.juice_bucket.none":"不明汁液",
   "advancement.nicebowl.root.title": "蓝白碗",
   "advancement.nicebowl.root.description": "多功能工具",
@@ -20,7 +20,7 @@
   "advancement.nicebowl.juice_bucket.title": "圣水…？",
   "advancement.nicebowl.juice_bucket.description": "获得一桶奇怪的液体",
   "advancement.nicebowl.nicebowl_overnight.title": "灵感满溢的甜蜜创想",
-  "advancement.nicebowl.nicebowl_overnight.description": "穿着蓝白胖次入睡…醒来会发生什么呢",
+  "advancement.nicebowl.nicebowl_overnight.description": "穿着蓝白胖次入睡…醒来会发生什么呢？",
   "advancement.nicebowl.block_projectile.title": "克莱因力场",
   "advancement.nicebowl.block_projectile.description": "使用蓝白碗套装防御射来的东西"
 }

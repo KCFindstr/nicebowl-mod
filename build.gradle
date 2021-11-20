@@ -14,7 +14,7 @@ apply plugin: 'maven-publish'
 
 version = '0.1'
 group = 'com.kcfindstr.nicebowl' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'nicebowl'
+archivesBaseName = 'NiceBowl-mod'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
