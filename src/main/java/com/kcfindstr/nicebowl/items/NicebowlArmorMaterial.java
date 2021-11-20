@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 
 public enum NicebowlArmorMaterial implements IArmorMaterial {
-  NICEBOWL("nicebowl", 20, new int[]{2, 5, 6, 2}, 20, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.2F, () -> {
+  NICEBOWL("nicebowl", 20, new int[]{2, 5, 6, 2}, 20, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.1F, () -> {
     return Ingredient.of(Items.WHITE_WOOL);
   });
 
