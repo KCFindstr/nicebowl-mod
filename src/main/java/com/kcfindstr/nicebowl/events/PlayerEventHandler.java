@@ -63,7 +63,7 @@ public class PlayerEventHandler {
       return;
     }
     Utils.logInfo("Nicebowl thrown by " + thrower.getStringUUID() + " picked up by " + player.getStringUUID());
-    if (thrower == null || (false && thrower.getUUID().equals(player.getUUID()))) {
+    if (thrower == null || thrower.getUUID().equals(player.getUUID())) {
       return;
     }
     PlayerData itemOwner = PlayerUtils.getPlayer(itemStack);
