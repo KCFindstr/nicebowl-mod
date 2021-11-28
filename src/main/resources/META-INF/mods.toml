@@ -37,7 +37,7 @@ description='''
 The NiceBowl mod adds a single item, the NiceBowl, to the game. Craft and enjoy the NiceBowl!
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.examplemod]] #optional
+[[dependencies.nicebowl]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -49,7 +49,7 @@ The NiceBowl mod adds a single item, the NiceBowl, to the game. Craft and enjoy 
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.examplemod]]
+[[dependencies.nicebowl]]
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
