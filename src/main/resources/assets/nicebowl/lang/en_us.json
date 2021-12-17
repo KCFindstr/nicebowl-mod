@@ -25,5 +25,6 @@
   "advancement.nicebowl.nicebowl_overnight.title": "Imagination Overflow",
   "advancement.nicebowl.nicebowl_overnight.description": "Sleep with the NiceBowl underwear... What's happening?",
   "advancement.nicebowl.block_projectile.title": "Wave Force Armor",
-  "advancement.nicebowl.block_projectile.description": "Block projectiles with the NiceBowl suite"
+  "advancement.nicebowl.block_projectile.description": "Block projectiles with the NiceBowl suite",
+  "effect.nicebowl.estrus": "Estrus"
 }
