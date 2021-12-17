@@ -14,6 +14,7 @@ import com.kcfindstr.nicebowl.blocks.BlockRegistry;
 import com.kcfindstr.nicebowl.blocks.TileEntityRegistry;
 import com.kcfindstr.nicebowl.fluids.FluidRegistry;
 import com.kcfindstr.nicebowl.items.ItemRegistry;
+import com.kcfindstr.nicebowl.potions.EffectRegistry;
 import com.kcfindstr.nicebowl.utils.Constants;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -32,6 +33,7 @@ public class NiceBowlMod {
     ItemRegistry.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
     FluidRegistry.FLUIDS.register(FMLJavaModLoadingContext.get().getModEventBus());
     TileEntityRegistry.TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+    EffectRegistry.EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
   }
 
   private void setup(final FMLCommonSetupEvent event) {
