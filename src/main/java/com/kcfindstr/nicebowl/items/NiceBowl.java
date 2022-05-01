@@ -10,7 +10,6 @@ import com.kcfindstr.nicebowl.blocks.NiceBowlTileEntity;
 import com.kcfindstr.nicebowl.utils.PlayerData;
 import com.kcfindstr.nicebowl.utils.PlayerUtils;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -54,16 +53,14 @@ public class NiceBowl extends ArmorItem {
     World world = context.getLevel();
     BlockPos blockpos = context.getClickedPos();
     BlockState blockstate = world.getBlockState(blockpos);
-    Block block = blockstate.getBlock();
     BlockItemUseContext blockItemUseContext = new BlockItemUseContext(context);
     ItemStack stack = context.getItemInHand();
-    if (!block.canBeReplaced(blockstate, blockItemUseContext))
+    if (!blockstate.canBeReplaced(blockItemUseContext))
     {
       blockpos = blockpos.offset(context.getClickedFace().getNormal());
       blockstate = world.getBlockState(blockpos);
-      block = blockstate.getBlock();
     }
-    if (!block.canBeReplaced(blockstate, blockItemUseContext)) {
+    if (!blockstate.canBeReplaced(blockItemUseContext)) {
       return ActionResultType.FAIL;
     }
     PlayerData player = PlayerUtils.getPlayer(stack);
