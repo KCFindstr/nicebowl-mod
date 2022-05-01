@@ -6,6 +6,7 @@
   "item.nicebowl.nicebowl": "NiceBowl",
   "item.nicebowl.nicebowl_head": "NiceBowl",
   "item.nicebowl.juice_bucket":"Bucket",
+  "item.nicebowl.estrus":"Estrus",
   "itemGroup.nicebowl_group": "NiceBowl",
   "tooltip.nicebowl.player":"With %s Juice",
   "tooltip.juice_bucket.player":"%s Juice",
@@ -26,5 +27,7 @@
   "advancement.nicebowl.nicebowl_overnight.description": "Sleep with the NiceBowl underwear... What's happening?",
   "advancement.nicebowl.block_projectile.title": "Wave Force Armor",
   "advancement.nicebowl.block_projectile.description": "Block projectiles with the NiceBowl suite",
+  "advancement.nicebowl.enter_estrus.title": "Computer parts",
+  "advancement.nicebowl.enter_estrus.description": "Touching the holy water makes me feel so strange...",
   "effect.nicebowl.estrus": "Estrus"
 }

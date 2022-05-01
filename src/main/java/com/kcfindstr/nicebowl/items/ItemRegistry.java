@@ -17,6 +17,7 @@ public class ItemRegistry {
 
   public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
   public static final RegistryObject<ArmorItem> niceBowl = ITEMS.register("nicebowl", NiceBowl::new);
+  public static final RegistryObject<Item> estrus = ITEMS.register("estrus", () -> new Item(new Item.Properties()));
   public static final RegistryObject<ArmorItem> niceBowlHead = ITEMS.register("nicebowl_head", NiceBowlHead::new);
   public static final RegistryObject<BucketItem> juiceBucket = ITEMS.register("juice_bucket", JuiceBucket::new);
   public static final RegistryObject<BlockItem> niceBowlBlock = ITEMS.register("nicebowl_block", () -> {

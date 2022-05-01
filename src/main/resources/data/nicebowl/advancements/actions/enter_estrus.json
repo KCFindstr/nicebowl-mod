@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "nicebowl:estrus"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.enter_estrus.title"
+    },
+    "description": {
+      "translate": "advancement.nicebowl.enter_estrus.description"
+    }
+  },
+  "parent": "nicebowl:recipes/juice_bucket",
+  "criteria": {
+    "has_estrus": {
+      "trigger": "minecraft:effects_changed",
+      "conditions": {
+        "effects": {
+          "nicebowl:estrus": {}
+        }
+      }
+    }
+  }
+}

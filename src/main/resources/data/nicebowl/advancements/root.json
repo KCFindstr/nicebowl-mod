@@ -12,8 +12,20 @@
     "background": "nicebowl:textures/gui/advancements/background.png"
   },
   "criteria": {
-    "impossible": {
-      "trigger": "minecraft:impossible"
+    "has_bowl": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:bowl"
+          }
+        ]
+      }
     }
+  },
+  "rewards": {
+    "recipes": [
+      "nicebowl:nicebowl"
+    ]
   }
 }

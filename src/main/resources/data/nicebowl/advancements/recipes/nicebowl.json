@@ -22,10 +22,5 @@
         ]
       }
     }
-  },
-  "rewards": {
-    "recipes": [
-      "nicebowl:nicebowl"
-    ]
   }
 }
