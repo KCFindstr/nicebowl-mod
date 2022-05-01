@@ -1,6 +1,7 @@
 package com.kcfindstr.nicebowl.potions;
 
 import com.kcfindstr.nicebowl.utils.Constants;
+import com.kcfindstr.nicebowl.utils.Rand;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
@@ -15,6 +16,10 @@ public class EstrusEffect extends Effect {
 
   private int getEffectInterval(int amplifier) {
     return EFFECT_INTERVAL >> amplifier;
+  }
+
+  public boolean tryHeal(int amplifier) {
+    return Rand.withProb(Math.max(1, amplifier), 4);
   }
 
   @Override

@@ -6,6 +6,7 @@ import com.kcfindstr.nicebowl.items.NiceBowl;
 import com.kcfindstr.nicebowl.potions.EffectRegistry;
 import com.kcfindstr.nicebowl.potions.EstrusEffect;
 import com.kcfindstr.nicebowl.utils.AdvancementUtils;
+import com.kcfindstr.nicebowl.utils.CollectionUtils;
 import com.kcfindstr.nicebowl.utils.Constants;
 import com.kcfindstr.nicebowl.utils.PlayerData;
 import com.kcfindstr.nicebowl.utils.PlayerUtils;
@@ -99,7 +100,9 @@ public class PlayerEventHandler {
     if (amount <= 0) {
       return;
     }
-    if (entity.hasEffect(EffectRegistry.estrus.get())) {
+    EstrusEffect estrus = EffectRegistry.estrus.get();
+    EffectInstance effect = CollectionUtils.find(entity.getActiveEffects(), e -> e.getEffect() == estrus);
+    if (effect != null && estrus.tryHeal(effect.getAmplifier())) {
       entity.heal(amount);
       amount = 0;
     } else {
