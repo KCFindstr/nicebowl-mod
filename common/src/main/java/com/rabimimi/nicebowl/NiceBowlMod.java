@@ -1,0 +1,58 @@
+package com.rabimimi.nicebowl;
+
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import com.rabimimi.nicebowl.blocks.BlockRegistry;
+import com.rabimimi.nicebowl.blocks.TileEntityRegistry;
+import com.rabimimi.nicebowl.fluids.FluidRegistry;
+import com.rabimimi.nicebowl.items.ItemRegistry;
+import com.rabimimi.nicebowl.potions.EffectRegistry;
+import com.rabimimi.nicebowl.utils.Constants;
+
+public class NiceBowlMod {
+  public static final String MOD_ID = "nicebowl";
+
+  public static void init() {
+
+  }
+
+  public NiceBowlMod() {
+    // Register the setup method for modloading
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+    // Register the doClientStuff method for modloading
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+
+    // Register ourselves for server and other game events we are interested in
+    MinecraftForge.EVENT_BUS.register(this);
+
+    BlockRegistry.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    ItemRegistry.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    FluidRegistry.FLUIDS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    TileEntityRegistry.TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+    EffectRegistry.EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
+  }
+
+  private void setup(final FMLCommonSetupEvent event) {
+    // some preinit code
+  }
+
+  private void clientSetup(final FMLClientSetupEvent event) {
+    RenderTypeLookup.setRenderLayer(FluidRegistry.juice.get(), RenderType.translucent());
+    RenderTypeLookup.setRenderLayer(FluidRegistry.juiceFlowing.get(), RenderType.translucent());
+    RenderTypeLookup.setRenderLayer(BlockRegistry.niceBowl.get(), RenderType.translucent());
+  }
+
+  // You can use SubscribeEvent and let the Event Bus discover methods to call
+  @SubscribeEvent
+  public void onServerStarting(FMLServerStartingEvent event) {
+    // do something when the server starts
+  }
+}
