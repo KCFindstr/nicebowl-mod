@@ -10,6 +10,8 @@ import net.minecraft.client.render.RenderLayer;
 public class NiceBowlClient {
   public static void onInitializeClient() {
     ItemRegistry.postInit();
+
+    // Render layers
     RenderTypeRegistry.register(RenderLayer.getTranslucent(),
         BlockRegistry.JUICE.get(),
         BlockRegistry.NICE_BOWL.get());

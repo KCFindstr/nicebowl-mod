@@ -13,8 +13,11 @@ import com.rabimimi.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
@@ -44,6 +47,29 @@ public class NiceBowl extends ArmorItem {
       TooltipContext tooltip) {
     NiceBowlBlock.appendTooltip(itemStack, text);
     super.appendTooltip(itemStack, world, text, tooltip);
+  }
+
+  public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity entity) {
+    return armorType == EquipmentSlot.LEGS || armorType == EquipmentSlot.HEAD;
+  }
+
+  public ItemStack getEquipable(EquipmentSlot slot, ItemStack stack) {
+    if (slot == null) {
+      return stack;
+    }
+    Item expectedItem = switch (slot) {
+      case HEAD -> ItemRegistry.NICE_BOWL_HEAD.get();
+      case LEGS -> ItemRegistry.NICE_BOWL.get();
+      default -> null;
+    };
+    if (expectedItem == null || expectedItem.equals(stack.getItem())) {
+      return stack;
+    }
+    ItemStack newStack = new ItemStack(expectedItem, stack.getCount());
+    if (stack.hasNbt()) {
+      newStack.setNbt(stack.getNbt());
+    }
+    return newStack;
   }
 
   @Override

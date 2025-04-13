@@ -11,5 +11,5 @@ public class EffectRegistry {
   public static final DeferredRegister<StatusEffect> EFFECTS = DeferredRegister.create(NiceBowlMod.MOD_ID,
       RegistryKeys.STATUS_EFFECT);
 
-  public static DeferredSupplier<EstrusEffect> estrus = EFFECTS.register("estrus", EstrusEffect::new);
+  public static DeferredSupplier<EstrusEffect> ESTRUS = EFFECTS.register("estrus", EstrusEffect::new);
 }

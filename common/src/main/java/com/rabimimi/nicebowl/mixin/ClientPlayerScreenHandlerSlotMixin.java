@@ -6,12 +6,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.items.NiceBowl;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
@@ -40,22 +38,6 @@ public abstract class ClientPlayerScreenHandlerSlotMixin extends Slot {
     if (!(stack.getItem() instanceof NiceBowl niceBowl)) {
       return stack;
     }
-    EquipmentSlot slot = this.field_7834;
-    if (slot == niceBowl.getSlotType()) {
-      return stack;
-    }
-    Item expectedItem = switch (slot) {
-      case HEAD -> ItemRegistry.NICE_BOWL_HEAD.get();
-      case LEGS -> ItemRegistry.NICE_BOWL.get();
-      default -> null;
-    };
-    if (expectedItem == null) {
-      return stack;
-    }
-    ItemStack newStack = new ItemStack(expectedItem, stack.getCount());
-    if (stack.hasNbt()) {
-      newStack.setNbt(stack.getNbt());
-    }
-    return newStack;
+    return niceBowl.getEquipable(this.field_7834, stack);
   }
 }

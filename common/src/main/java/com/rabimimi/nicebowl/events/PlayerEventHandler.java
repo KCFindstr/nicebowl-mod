@@ -84,7 +84,7 @@ public class PlayerEventHandler {
         || amount <= 0) {
       return EventResult.pass();
     }
-    EstrusEffect estrus = EffectRegistry.estrus.get();
+    EstrusEffect estrus = EffectRegistry.ESTRUS.get();
     StatusEffectInstance effect = entity.getStatusEffect(estrus);
     if (effect != null && estrus.tryHeal(entity.getRandom(), effect.getAmplifier())) {
       entity.heal(amount);
@@ -113,7 +113,7 @@ public class PlayerEventHandler {
     BlockPos pos = player.getBlockPos();
     BlockState blockState = player.getWorld().getBlockState(pos);
     if (blockState.getBlock() instanceof JuiceBlock) {
-      StatusEffect effect = EffectRegistry.estrus.get();
+      StatusEffect effect = EffectRegistry.ESTRUS.get();
       StatusEffectInstance instance = player.getStatusEffect(effect);
       if (instance == null || instance.getDuration() <= EstrusEffect.EFFECT_INTERVAL) {
         player.addStatusEffect(new StatusEffectInstance(effect, EstrusEffect.EFFECT_INTERVAL * 2));
@@ -122,7 +122,7 @@ public class PlayerEventHandler {
   }
 
   public static Optional<Integer> getFogColor(PlayerEntity playerEntity) {
-    if (playerEntity.hasStatusEffect(EffectRegistry.estrus.get())) {
+    if (playerEntity.hasStatusEffect(EffectRegistry.ESTRUS.get())) {
       return Optional.of(Constants.ESTRUS_COLOR_INT);
     } else {
       return Optional.empty();
@@ -130,11 +130,11 @@ public class PlayerEventHandler {
   }
 
   public static Optional<Float> getFogDensity(PlayerEntity playerEntity) {
-    StatusEffectInstance effect = playerEntity.getStatusEffect(EffectRegistry.estrus.get());
+    StatusEffectInstance effect = playerEntity.getStatusEffect(EffectRegistry.ESTRUS.get());
     if (effect == null) {
       return Optional.empty();
     } else {
-      return Optional.of(0.1f * Math.min((float) effect.getDuration() / EstrusEffect.EFFECT_INTERVAL, 1));
+      return Optional.of(Math.min((float) effect.getDuration() / 20, 1));
     }
   }
 }
