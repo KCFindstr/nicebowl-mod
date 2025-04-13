@@ -38,6 +38,6 @@ public class EstrusEffect extends StatusEffect {
     if (remainHealth <= 0) {
       return;
     }
-    entity.heal(0.5f);
+    entity.heal(1f);
   }
 }

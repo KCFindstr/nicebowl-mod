@@ -21,25 +21,13 @@ public class NiceBowlBlockEntity extends BlockEntity {
   }
 
   public void setPlayer(PlayerData player) {
-    this.player = PlayerUtils.isValid(player) ? player : null;
+    this.player = player;
     markDirty();
   }
 
   @Nullable
   public PlayerData getPlayer() {
     return player;
-  }
-
-  public boolean hasPlayer() {
-    return PlayerUtils.isValid(player);
-  }
-
-  public String getPlayerName() {
-    return player.name;
-  }
-
-  private void loadPlayer(NbtCompound tag) {
-    setPlayer(PlayerUtils.getPlayer(tag));
   }
 
   @Nullable
@@ -58,7 +46,7 @@ public class NiceBowlBlockEntity extends BlockEntity {
   @Override
   public void readNbt(NbtCompound tag) {
     super.readNbt(tag);
-    loadPlayer(tag);
+    setPlayer(PlayerUtils.getPlayer(tag));
   }
 
   @Override

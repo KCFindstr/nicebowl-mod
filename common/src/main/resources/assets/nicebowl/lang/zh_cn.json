@@ -9,6 +9,7 @@
   "item.nicebowl.estrus": "发情",
   "itemGroup.nicebowl.nicebowl_group": "蓝白碗",
   "tooltip.nicebowl.player": "盛着%s汁",
+  "tooltip.nicebowl.none": "盛着不明汁液",
   "tooltip.juice_bucket.player": "%s汁",
   "tooltip.juice_bucket.none": "不明汁液",
   "advancement.nicebowl.root.title": "蓝白碗",

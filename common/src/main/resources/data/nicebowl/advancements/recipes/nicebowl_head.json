@@ -17,7 +17,9 @@
       "conditions": {
         "items": [
           {
-            "item": "nicebowl:nicebowl_head"
+            "items": [
+              "nicebowl:nicebowl_head"
+            ]
           }
         ]
       }

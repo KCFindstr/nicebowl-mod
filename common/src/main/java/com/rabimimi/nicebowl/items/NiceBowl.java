@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
 import com.rabimimi.nicebowl.blocks.NiceBowlBlock;
 import com.rabimimi.nicebowl.blocks.NiceBowlBlockEntity;
+import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
 import com.rabimimi.nicebowl.utils.PlayerUtils;
 
@@ -17,7 +18,7 @@ import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -59,19 +60,15 @@ public class NiceBowl extends ArmorItem {
     if (!blockstate.canReplace(itemPlacementContext)) {
       return ActionResult.FAIL;
     }
-    PlayerData player = PlayerUtils.getPlayer(stack);
-    NiceBowlBlock nicebowl = BlockRegistry.NICE_BOWL.get();
-    BlockState newBlockstate = nicebowl.getBlockState(PlayerUtils.isValid(player) ? 1 : 0);
-    world.setBlockState(blockpos, newBlockstate);
     if (!world.isClient) {
-      if (PlayerUtils.isValid(player)) {
-        BlockEntity blockEntity = world.getBlockEntity(blockpos);
-        if (blockEntity instanceof NiceBowlBlockEntity entity) {
-          entity.setPlayer(player);
-          world.updateListeners(blockpos, blockstate, newBlockstate, 3);
-        }
+      PlayerData player = PlayerUtils.getPlayer(stack);
+      NiceBowlBlock nicebowl = BlockRegistry.NICE_BOWL.get();
+      BlockState newBlockstate = nicebowl.getBlockState(player == null ? 0 : 1);
+      world.setBlockState(blockpos, newBlockstate, Constants.DEFAULT_AND_RERENDER);
+      if (world.getBlockEntity(blockpos) instanceof NiceBowlBlockEntity entity) {
+        entity.setPlayer(player);
       }
-      context.getPlayer().playSound(SoundEvents.BLOCK_WOOL_PLACE, 1.0F, 1.0F);
+      world.playSound(null, blockpos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS);
       stack.decrement(1);
     }
     return ActionResult.SUCCESS;

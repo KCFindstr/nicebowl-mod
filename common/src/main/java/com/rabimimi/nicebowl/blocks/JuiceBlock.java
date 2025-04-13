@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 
 public class JuiceBlock extends ArchitecturyLiquidBlock implements BlockEntityProvider {
   public JuiceBlock() {
-    super(FluidRegistry.JUICE, Block.Settings.copy(Blocks.WATER).noCollision().strength(100.0F).dropsNothing());
+    super(FluidRegistry.JUICE, Block.Settings.copy(Blocks.WATER));
   }
 
   @Override

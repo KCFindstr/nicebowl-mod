@@ -2,7 +2,7 @@
   "display": {
     "icon": {
       "item": "nicebowl:nicebowl",
-      "nbt": "{\"nicebowl:player_uid\":\"placeholder\",\"nicebowl:player_name\":\"奇怪\"}"
+      "nbt": "{\"nicebowl:player_name\":\"none\"}"
     },
     "title": {
       "translate": "advancement.nicebowl.send_nicebowl.title"

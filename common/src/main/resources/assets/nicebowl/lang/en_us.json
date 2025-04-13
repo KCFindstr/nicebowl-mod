@@ -9,6 +9,7 @@
   "item.nicebowl.estrus": "Estrus",
   "itemGroup.nicebowl.nicebowl_group": "NiceBowl",
   "tooltip.nicebowl.player": "With %s Juice",
+  "tooltip.nicebowl.none": "With Unknown Juice",
   "tooltip.juice_bucket.player": "%s Juice",
   "tooltip.juice_bucket.none": "Unknown Juice",
   "advancement.nicebowl.root.title": "NiceBowl",

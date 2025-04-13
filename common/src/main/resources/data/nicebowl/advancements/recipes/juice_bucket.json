@@ -17,7 +17,9 @@
       "conditions": {
         "items": [
           {
-            "item": "nicebowl:juice_bucket"
+            "items": [
+              "nicebowl:juice_bucket"
+            ]
           }
         ]
       }

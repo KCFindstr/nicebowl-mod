@@ -31,10 +31,10 @@ public class JuiceBucket extends BucketItem {
     super.appendTooltip(itemStack, world, text, tooltip);
     MutableText txt;
     PlayerData player = PlayerUtils.getPlayer(itemStack);
-    if (PlayerUtils.isValid(player)) {
-      txt = Text.translatable("tooltip.juice_bucket.player", player.name);
-    } else {
+    if (PlayerUtils.isEmpty(player)) {
       txt = Text.translatable("tooltip.juice_bucket.none");
+    } else {
+      txt = Text.translatable("tooltip.juice_bucket.player", player.name);
     }
     txt = txt.fillStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFF99FF)));
     text.add(txt);

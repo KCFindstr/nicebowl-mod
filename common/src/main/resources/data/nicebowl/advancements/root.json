@@ -17,12 +17,26 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:bowl"
+            "items": [
+              "minecraft:bowl"
+            ]
           }
         ]
       }
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "nicebowl:nicebowl"
+      },
+      "trigger": "minecraft:recipe_unlocked"
     }
   },
+  "requirements": [
+    [
+      "has_bowl",
+      "has_the_recipe"
+    ]
+  ],
   "rewards": {
     "recipes": [
       "nicebowl:nicebowl"

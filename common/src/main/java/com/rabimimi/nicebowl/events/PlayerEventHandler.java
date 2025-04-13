@@ -44,7 +44,7 @@ public class PlayerEventHandler {
     NiceBowlMod.LOGGER.info("Player {} woke up", player.getDisplayName().getString());
     ItemStack itemStack = player.getEquippedStack(EquipmentSlot.LEGS);
     if (itemStack.getItem() instanceof NiceBowl) {
-      PlayerData playerData = new PlayerData(player.getUuidAsString(), player.getDisplayName().getString());
+      PlayerData playerData = new PlayerData(player);
       PlayerUtils.setPlayer(itemStack, playerData);
       player.getInventory().markDirty();
     }
@@ -67,7 +67,7 @@ public class PlayerEventHandler {
       return;
     }
     PlayerData itemOwner = PlayerUtils.getPlayer(stack);
-    if (!PlayerUtils.isValid(itemOwner)) {
+    if (PlayerUtils.isEmpty(itemOwner)) {
       return;
     }
     NiceBowlMod.LOGGER.info("Nicebowl is from {}" + itemOwner.uid);
@@ -97,6 +97,9 @@ public class PlayerEventHandler {
         }
       }
       if (niceBowlCount >= 2) {
+        if (entity instanceof ServerPlayerEntity serverPlayer) {
+          AdvancementUtils.grantAdvancement(serverPlayer, AdvancementUtils.BLOCK_PROJECTILE);
+        }
         return EventResult.interruptFalse();
       }
     }

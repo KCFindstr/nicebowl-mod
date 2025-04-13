@@ -9,8 +9,8 @@ import net.minecraft.nbt.NbtCompound;
 
 public class PlayerUtils {
 
-  public static boolean isValid(PlayerData player) {
-    return player != null && player.isValid();
+  public static boolean isEmpty(PlayerData playerData) {
+    return playerData == null || playerData.isEmpty();
   }
 
   public static void setPlayer(NbtCompound tag, PlayerData player) {
@@ -42,8 +42,10 @@ public class PlayerUtils {
 
   @Nullable
   public static PlayerData getPlayer(NbtCompound tag) {
-    PlayerData ret = new PlayerData(tag);
-    return ret.isValid() ? ret : null;
+    if (tag == null) {
+      return null;
+    }
+    return new PlayerData(tag);
   }
 
   @Nullable
@@ -60,7 +62,7 @@ public class PlayerUtils {
       return;
     }
     PlayerData player = getPlayer(src);
-    if (!isValid(player)) {
+    if (player == null) {
       return;
     }
     NbtCompound target = dest.getOrCreateNbt();
@@ -72,21 +74,18 @@ public class PlayerUtils {
     if (src == null || dest == null)
       return;
     PlayerData player = getPlayer(src);
-    if (!isValid(player)) {
-      return;
-    }
     setPlayer(dest, player);
   }
 
   public static void copyPlayerData(NiceBowlBlockEntity src, NiceBowlBlockEntity dest) {
-    if (src == null || dest == null || !src.hasPlayer()) {
+    if (src == null || dest == null) {
       return;
     }
     setPlayer(dest, src.getPlayer());
   }
 
   public static void copyPlayerData(NiceBowlBlockEntity src, ItemStack dest) {
-    if (src == null || dest == null || !src.hasPlayer()) {
+    if (src == null || dest == null) {
       return;
     }
     setPlayer(dest, src.getPlayer());
