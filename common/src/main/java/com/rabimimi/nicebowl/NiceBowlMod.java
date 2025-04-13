@@ -1,6 +1,7 @@
 package com.rabimimi.nicebowl;
 
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
+import com.rabimimi.nicebowl.events.EventRegistry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,5 +38,8 @@ public class NiceBowlMod {
 
     // Register effects
     EffectRegistry.EFFECTS.register();
+
+    // Register events
+    EventRegistry.init();
   }
 }

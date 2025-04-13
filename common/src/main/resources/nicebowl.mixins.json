@@ -6,7 +6,9 @@
   "client": [
     "ClientPlayerScreenHandlerSlotMixin"
   ],
-  "mixins": [],
+  "mixins": [
+    "ServerWorldMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

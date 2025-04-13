@@ -76,21 +76,4 @@ public class NiceBowl extends ArmorItem {
     }
     return ActionResult.SUCCESS;
   }
-
-  // TODO: Implement
-  // @Override
-  // public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity
-  // entity) {
-  // return armorType == EquipmentSlot.HEAD || armorType == EquipmentSlot.LEGS;
-  // }
-
-  // @Override
-  // public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot
-  // slot, String type) {
-  // String layer = slot == EquipmentSlot.LEGS ? "2" : "1";
-  // String name = PlayerUtils.isValid(PlayerUtils.getPlayer(stack)) ?
-  // "nicebowl_used_layer_" : "nicebowl_layer_";
-  // String path = "nicebowl:textures/models/armor/" + name + layer + ".png";
-  // return path;
-  // }
 }

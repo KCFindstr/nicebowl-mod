@@ -4,18 +4,15 @@ import java.util.Optional;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.JuiceBlock;
-import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.items.NiceBowl;
 import com.rabimimi.nicebowl.potions.EffectRegistry;
 import com.rabimimi.nicebowl.potions.EstrusEffect;
 import com.rabimimi.nicebowl.utils.AdvancementUtils;
-import com.rabimimi.nicebowl.utils.CollectionUtils;
 import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
 import com.rabimimi.nicebowl.utils.PlayerUtils;
 
 import dev.architectury.event.EventResult;
-import dev.architectury.event.events.client.ClientGuiEvent;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.event.events.common.TickEvent;
@@ -34,18 +31,17 @@ import net.minecraft.util.math.BlockPos;
 
 public class PlayerEventHandler {
 
+  public static final RabiEvent<ServerPlayerEntity> PLAYER_WAKE_UP_SKIP_NIGHT = new RabiEvent<>();
+
   public static void init() {
     PlayerEvent.PICKUP_ITEM_POST.register(PlayerEventHandler::onItemPickupPost);
     TickEvent.PLAYER_PRE.register(PlayerEventHandler::onPlayerTickPre);
     EntityEvent.LIVING_HURT.register(PlayerEventHandler::onLivingHurt);
+    PLAYER_WAKE_UP_SKIP_NIGHT.register(PlayerEventHandler::onWakeUpSkipNight);
   }
 
-  public static void onWakeUp(ServerPlayerEntity player) {
-    NiceBowlMod.LOGGER.info("{} wakes up, sleep timer is {}", player.getDisplayName().getString(),
-        player.getSleepTimer());
-    if (!player.canResetTimeBySleeping()) {
-      return;
-    }
+  private static void onWakeUpSkipNight(ServerPlayerEntity player) {
+    NiceBowlMod.LOGGER.info("Player {} woke up", player.getDisplayName().getString());
     ItemStack itemStack = player.getEquippedStack(EquipmentSlot.LEGS);
     if (itemStack.getItem() instanceof NiceBowl) {
       PlayerData playerData = new PlayerData(player.getUuidAsString(), player.getDisplayName().getString());
@@ -54,7 +50,7 @@ public class PlayerEventHandler {
     }
   }
 
-  public static void onItemPickupPost(PlayerEntity player, ItemEntity itemEntity, ItemStack stack) {
+  private static void onItemPickupPost(PlayerEntity player, ItemEntity itemEntity, ItemStack stack) {
     if (!(player instanceof ServerPlayerEntity serverPlayer)) {
       return;
     }
@@ -82,7 +78,7 @@ public class PlayerEventHandler {
     AdvancementUtils.grantAdvancement(thrower, AdvancementUtils.SEND_NICEBOWL);
   }
 
-  public static EventResult onLivingHurt(LivingEntity entity, DamageSource source, float amount) {
+  private static EventResult onLivingHurt(LivingEntity entity, DamageSource source, float amount) {
     if (entity.getWorld().isClient
         || !source.isIn(DamageTypeTags.IS_PROJECTILE)
         || amount <= 0) {
@@ -107,7 +103,7 @@ public class PlayerEventHandler {
     return EventResult.pass();
   }
 
-  public static void onPlayerTickPre(PlayerEntity player) {
+  private static void onPlayerTickPre(PlayerEntity player) {
     if (player.getWorld().isClient) {
       return;
     }
