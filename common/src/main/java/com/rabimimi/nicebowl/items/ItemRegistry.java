@@ -33,12 +33,13 @@ public class ItemRegistry {
               () -> new ItemStack(ItemRegistry.NICE_BOWL.get())));
 
   public static final RegistrySupplier<ArmorItem> NICE_BOWL = ITEMS.register("nicebowl", NiceBowl::new);
-  // Keep for advancements
-  public static final RegistrySupplier<Item> ESTRUS = ITEMS.register("estrus", () -> new Item(new Item.Settings()));
   public static final RegistrySupplier<ArmorItem> NICE_BOWL_HEAD = ITEMS.register("nicebowl_head", NiceBowlHead::new);
   public static final RegistrySupplier<Item> JUICE_BUCKET = ITEMS.register("juice_bucket", JuiceBucket::new);
   public static final RegistrySupplier<BlockItem> NICE_BOWL_BLOCK = ITEMS.register("nicebowl_block",
       () -> new BlockItem(BlockRegistry.NICE_BOWL.get(), defaultSetting()));
+
+  // Keep for advancements
+  public static final RegistrySupplier<Item> ESTRUS = ITEMS.register("estrus", () -> new Item(new Item.Settings()));
 
   public static Item.Settings defaultSetting() {
     return new Item.Settings().arch$tab(NICE_BOWL_GROUP);

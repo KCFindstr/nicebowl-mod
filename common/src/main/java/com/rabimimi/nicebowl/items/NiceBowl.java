@@ -30,8 +30,7 @@ public class NiceBowl extends ArmorItem {
   }
 
   public NiceBowl() {
-    super(NicebowlArmorMaterial.NICEBOWL, Type.LEGGINGS,
-        ItemRegistry.defaultSetting().fireproof());
+    this(NicebowlArmorMaterial.NICEBOWL, Type.LEGGINGS, ItemRegistry.defaultSetting().fireproof());
   }
 
   @Override

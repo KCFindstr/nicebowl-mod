@@ -31,7 +31,7 @@ public class BucketEventHandler {
       World world,
       ItemStack stack,
       @Nullable HitResult target) {
-    if (!(target instanceof BlockHitResult blockHitResult) || player.getWorld().isClient) {
+    if (player.getWorld().isClient || !(target instanceof BlockHitResult blockHitResult)) {
       return CompoundEventResult.pass();
     }
     BlockPos pos = blockHitResult.getBlockPos();
