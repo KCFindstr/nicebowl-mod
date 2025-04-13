@@ -1,38 +1,42 @@
 package com.rabimimi.nicebowl.fluids;
 
+import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
-import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.utils.Constants;
 
-import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
+import dev.architectury.core.fluid.ArchitecturyFlowingFluid;
+import dev.architectury.core.fluid.ArchitecturyFluidAttributes;
+import dev.architectury.core.fluid.SimpleArchitecturyFluidAttributes;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 
 public class FluidRegistry {
-  public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS,
-      Constants.MOD_ID);
+  public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(
+      NiceBowlMod.MOD_ID, RegistryKeys.FLUID);
 
-  private static final ResourceLocation FLUID_STILL = new ResourceLocation(Constants.MOD_ID, "fluid/juice_still");
-  private static final ResourceLocation FLUID_FLOW = new ResourceLocation(Constants.MOD_ID, "fluid/juice_flow");
+  private static final Identifier FLUID_STILL = new Identifier(NiceBowlMod.MOD_ID, "fluid/juice_still");
+  private static final Identifier FLUID_FLOW = new Identifier(NiceBowlMod.MOD_ID, "fluid/juice_flow");
 
-  public static ForgeFlowingFluid.Properties makeProperties() {
-    return new ForgeFlowingFluid.Properties(
-        () -> juice.get(), () -> juiceFlowing.get(),
-        FluidAttributes
-            .builder(FLUID_STILL, FLUID_FLOW)
-            .color(Constants.JUICE_COLOR_TINT)
-            .viscosity(2000))
-        .bucket(ItemRegistry.juiceBucket)
-        .block(BlockRegistry.juice);
+  public static RegistrySupplier<FlowableFluid> JUICE;
+  public static RegistrySupplier<FlowableFluid> JUICE_FLOWING;
+
+  public static final ArchitecturyFluidAttributes JUICE_ATTRIBUTES = SimpleArchitecturyFluidAttributes.ofSupplier(
+      () -> JUICE_FLOWING,
+      () -> JUICE)
+      .sourceTexture(FLUID_STILL)
+      .flowingTexture(FLUID_FLOW)
+      .color(Constants.JUICE_COLOR_TINT)
+      .viscosity(2000)
+      .block(BlockRegistry.JUICE);
+
+  static {
+    JUICE = FLUIDS.register("juice",
+        () -> new ArchitecturyFlowingFluid.Source(JUICE_ATTRIBUTES));
+    JUICE_FLOWING = FLUIDS.register("juice_flow",
+        () -> new ArchitecturyFlowingFluid.Flowing(JUICE_ATTRIBUTES));
   }
-
-  public static RegistryObject<FlowingFluid> juice = FLUIDS.register("juice",
-      () -> new ForgeFlowingFluid.Source(makeProperties()));
-  public static RegistryObject<FlowingFluid> juiceFlowing = FLUIDS.register("juice_flow",
-      () -> new ForgeFlowingFluid.Flowing(makeProperties()));
 }

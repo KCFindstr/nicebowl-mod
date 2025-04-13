@@ -1,5 +1,8 @@
 package com.rabimimi.nicebowl.events;
 
+import java.util.Optional;
+
+import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.JuiceBlock;
 import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.items.NiceBowl;
@@ -10,158 +13,129 @@ import com.rabimimi.nicebowl.utils.CollectionUtils;
 import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
 import com.rabimimi.nicebowl.utils.PlayerUtils;
-import com.rabimimi.nicebowl.utils.Utils;
 
+import dev.architectury.event.EventResult;
+import dev.architectury.event.events.client.ClientGuiEvent;
+import dev.architectury.event.events.common.EntityEvent;
+import dev.architectury.event.events.common.PlayerEvent;
+import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
+import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber(modid = Constants.MOD_ID)
 public class PlayerEventHandler {
-  @SubscribeEvent
-  public static void onWakeUp(PlayerWakeUpEvent event) {
-    PlayerEntity player = event.getPlayer();
-    if (player.level.isClientSide) {
+
+  public static void init() {
+    PlayerEvent.PICKUP_ITEM_POST.register(PlayerEventHandler::onItemPickupPost);
+    TickEvent.PLAYER_PRE.register(PlayerEventHandler::onPlayerTickPre);
+    EntityEvent.LIVING_HURT.register(PlayerEventHandler::onLivingHurt);
+  }
+
+  public static void onWakeUp(ServerPlayerEntity player) {
+    NiceBowlMod.LOGGER.info("{} wakes up, sleep timer is {}", player.getDisplayName().getString(),
+        player.getSleepTimer());
+    if (!player.canResetTimeBySleeping()) {
       return;
     }
-    Utils.logInfo(player.getDisplayName().getString() + " wakes up, day time is " + player.level.getDayTime());
-    boolean successfulSleep = player.level.getDayTime() >= 24000 || player.level.getDayTime() <= 20;
-    if (!successfulSleep) {
-      return;
-    }
-    ItemStack itemStack = player.getItemBySlot(EquipmentSlotType.LEGS);
-    if (itemStack.getItem() == ItemRegistry.niceBowl.get()) {
-      PlayerData playerData = new PlayerData(player.getStringUUID(), player.getDisplayName().getString());
+    ItemStack itemStack = player.getEquippedStack(EquipmentSlot.LEGS);
+    if (itemStack.getItem() instanceof NiceBowl) {
+      PlayerData playerData = new PlayerData(player.getUuidAsString(), player.getDisplayName().getString());
       PlayerUtils.setPlayer(itemStack, playerData);
-      player.inventory.setChanged();
+      player.getInventory().markDirty();
     }
   }
 
-  @SubscribeEvent
-  public static void onItemPickup(EntityItemPickupEvent event) {
-    if (event.getEntity().level.isClientSide || !(event.getPlayer() instanceof ServerPlayerEntity)) {
+  public static void onItemPickupPost(PlayerEntity player, ItemEntity itemEntity, ItemStack stack) {
+    if (!(player instanceof ServerPlayerEntity serverPlayer)) {
       return;
     }
-    ItemEntity item = event.getItem();
-    if (item == null) {
+    if (!(stack.getItem() instanceof NiceBowl)) {
       return;
     }
-    ItemStack itemStack = item.getItem();
-    if (!(itemStack.getItem() instanceof NiceBowl)) {
+    if (!(itemEntity.getOwner() instanceof ServerPlayerEntity thrower)) {
       return;
     }
-    ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-    ServerPlayerEntity thrower = player.getServer().getPlayerList().getPlayer(item.getThrower());
-    if (thrower == null) {
+    NiceBowlMod.LOGGER.info("Nicebowl thrown by {} picked up by {}",
+        thrower.getDisplayName().getString(),
+        player.getDisplayName().getString());
+    if (thrower.equals(player)) {
       return;
     }
-    Utils.logInfo("Nicebowl thrown by " + thrower.getStringUUID() + " picked up by " + player.getStringUUID());
-    if (thrower.getUUID().equals(player.getUUID())) {
-      return;
-    }
-    PlayerData itemOwner = PlayerUtils.getPlayer(itemStack);
+    PlayerData itemOwner = PlayerUtils.getPlayer(stack);
     if (!PlayerUtils.isValid(itemOwner)) {
       return;
     }
-    Utils.logInfo("Nicebowl is from " + itemOwner.uid);
-    if (!itemOwner.uid.equals(thrower.getStringUUID())) {
+    NiceBowlMod.LOGGER.info("Nicebowl is from {}" + itemOwner.uid);
+    if (!itemOwner.uid.equals(thrower.getUuidAsString())) {
       return;
     }
-    AdvancementUtils.grantAdvancement(player, AdvancementUtils.RECEIVE_NICEBOWL);
+    AdvancementUtils.grantAdvancement(serverPlayer, AdvancementUtils.RECEIVE_NICEBOWL);
     AdvancementUtils.grantAdvancement(thrower, AdvancementUtils.SEND_NICEBOWL);
   }
 
-  @SubscribeEvent
-  public static void onLivingHurt(LivingHurtEvent event) {
-    LivingEntity entity = event.getEntityLiving();
-    if (entity == null || entity.level.isClientSide) {
-      return;
-    }
-    DamageSource source = event.getSource();
-    if (source == null || !source.isProjectile()) {
-      return;
-    }
-    float amount = event.getAmount();
-    if (amount <= 0) {
-      return;
+  public static EventResult onLivingHurt(LivingEntity entity, DamageSource source, float amount) {
+    if (entity.getWorld().isClient
+        || !source.isIn(DamageTypeTags.IS_PROJECTILE)
+        || amount <= 0) {
+      return EventResult.pass();
     }
     EstrusEffect estrus = EffectRegistry.estrus.get();
-    EffectInstance effect = CollectionUtils.find(entity.getActiveEffects(), e -> e.getEffect() == estrus);
-    if (effect != null && estrus.tryHeal(effect.getAmplifier())) {
+    StatusEffectInstance effect = entity.getStatusEffect(estrus);
+    if (effect != null && estrus.tryHeal(entity.getRandom(), effect.getAmplifier())) {
       entity.heal(amount);
-      amount = 0;
+      return EventResult.interruptFalse();
     } else {
       int niceBowlCount = 0;
-      if (entity.getItemBySlot(EquipmentSlotType.HEAD).getItem() instanceof NiceBowl) {
-        niceBowlCount++;
-      }
-      if (entity.getItemBySlot(EquipmentSlotType.LEGS).getItem() instanceof NiceBowl) {
-        niceBowlCount++;
-      }
-      if (niceBowlCount >= 2) {
-        amount /= 4f;
-        if (entity instanceof ServerPlayerEntity) {
-          ServerPlayerEntity player = (ServerPlayerEntity) entity;
-          AdvancementUtils.grantAdvancement(player, AdvancementUtils.BLOCK_PROJECTILE);
+      for (var item : entity.getArmorItems()) {
+        if (item.getItem() instanceof NiceBowl) {
+          niceBowlCount++;
         }
       }
+      if (niceBowlCount >= 2) {
+        return EventResult.interruptFalse();
+      }
     }
-    event.setAmount(amount);
+    return EventResult.pass();
   }
 
-  @SubscribeEvent
-  public static void onPlayerTick(PlayerTickEvent event) {
-    PlayerEntity player = event.player;
-    if (player.level.isClientSide) {
+  public static void onPlayerTickPre(PlayerEntity player) {
+    if (player.getWorld().isClient) {
       return;
     }
-    BlockPos pos = new BlockPos(player.getPosition(0));
-    BlockState blockState = player.level.getBlockState(pos);
+    BlockPos pos = player.getBlockPos();
+    BlockState blockState = player.getWorld().getBlockState(pos);
     if (blockState.getBlock() instanceof JuiceBlock) {
-      Effect effect = EffectRegistry.estrus.get();
-      EffectInstance instance = player.getEffect(effect);
+      StatusEffect effect = EffectRegistry.estrus.get();
+      StatusEffectInstance instance = player.getStatusEffect(effect);
       if (instance == null || instance.getDuration() <= EstrusEffect.EFFECT_INTERVAL) {
-        player.addEffect(new EffectInstance(effect, EstrusEffect.EFFECT_INTERVAL * 2));
+        player.addStatusEffect(new StatusEffectInstance(effect, EstrusEffect.EFFECT_INTERVAL * 2));
       }
     }
   }
 
-  @SubscribeEvent(receiveCanceled = true)
-  public static void onFogColorRender(EntityViewRenderEvent.FogColors event) {
-    if (event.getInfo().getEntity() instanceof PlayerEntity) {
-      PlayerEntity playerEntity = (PlayerEntity) event.getInfo().getEntity();
-      if (playerEntity.hasEffect(EffectRegistry.estrus.get())) {
-        event.setRed(((Constants.ESTRUS_COLOR_INT >> 16) & 0xff) / 255f);
-        event.setGreen(((Constants.ESTRUS_COLOR_INT >> 8) & 0xff) / 255f);
-        event.setBlue((Constants.ESTRUS_COLOR_INT & 0xff) / 255f);
-      }
+  public static Optional<Integer> getFogColor(PlayerEntity playerEntity) {
+    if (playerEntity.hasStatusEffect(EffectRegistry.estrus.get())) {
+      return Optional.of(Constants.ESTRUS_COLOR_INT);
+    } else {
+      return Optional.empty();
     }
   }
 
-  @SubscribeEvent(receiveCanceled = true)
-  public static void onFogDensityRender(EntityViewRenderEvent.FogDensity event) {
-    if (event.getInfo().getEntity() instanceof PlayerEntity) {
-      PlayerEntity playerEntity = (PlayerEntity) event.getInfo().getEntity();
-      EffectInstance effect = playerEntity.getEffect(EffectRegistry.estrus.get());
-      if (effect != null) {
-        event.setDensity(0.1f * Math.min((float) effect.getDuration() / EstrusEffect.EFFECT_INTERVAL, 1));
-        event.setCanceled(true);
-      }
+  public static Optional<Float> getFogDensity(PlayerEntity playerEntity) {
+    StatusEffectInstance effect = playerEntity.getStatusEffect(EffectRegistry.estrus.get());
+    if (effect == null) {
+      return Optional.empty();
+    } else {
+      return Optional.of(0.1f * Math.min((float) effect.getDuration() / EstrusEffect.EFFECT_INTERVAL, 1));
     }
   }
 }

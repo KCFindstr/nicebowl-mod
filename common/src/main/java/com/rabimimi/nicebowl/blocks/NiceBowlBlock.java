@@ -2,7 +2,7 @@ package com.rabimimi.nicebowl.blocks;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.utils.PlayerData;
@@ -10,136 +10,131 @@ import com.rabimimi.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.text.Text;
+import net.minecraft.text.Style;
+import net.minecraft.text.TextColor;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.util.ItemScatterer;
 
-public class NiceBowlBlock extends Block {
-  private static final VoxelShape shape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-  public static IntegerProperty LEVEL = IntegerProperty.create("level", 0, 1);
+public class NiceBowlBlock extends BlockWithEntity {
+  private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+  public static IntProperty LEVEL = IntProperty.of("level", 0, 1);
 
   @Nullable
-  public static ITextComponent getHoverText(CompoundNBT tag) {
+  public static Text getHoverText(NbtCompound tag) {
     PlayerData player = PlayerUtils.getPlayer(tag);
     if (PlayerUtils.isValid(player)) {
-      TranslationTextComponent txt = new TranslationTextComponent("tooltip.nicebowl.player", player.name);
-      txt.setStyle(Style.EMPTY.withColor(TextFormatting.LIGHT_PURPLE));
+      Text txt = Text.translatable("tooltip.nicebowl.player", player.name)
+          .fillStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFF99FF)));
       return txt;
     }
     return null;
   }
 
-  public static void addHoverText(ItemStack itemStack, List<ITextComponent> text) {
-    if (!itemStack.hasTag()) {
+  public static void appendTooltip(ItemStack itemStack, List<Text> text) {
+    if (!itemStack.hasNbt()) {
       return;
     }
-    CompoundNBT tag = itemStack.getTag();
-    ITextComponent txt = getHoverText(tag);
+    NbtCompound tag = itemStack.getNbt();
+    Text txt = getHoverText(tag);
     if (txt != null) {
       text.add(txt);
     }
   }
 
   public NiceBowlBlock() {
-    super(Properties.of(Material.WOOL).harvestLevel(1).strength(1).noOcclusion().sound(SoundType.WOOL));
-    this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0));
+    super(Settings.copy(Blocks.CYAN_WOOL).requiresTool().strength(1).nonOpaque().sounds(BlockSoundGroup.WOOL));
+    this.setDefaultState(this.stateManager.getDefaultState().with(LEVEL, 0));
   }
 
   public BlockState getBlockState(int waterLevel) {
-    BlockState blockState = this.defaultBlockState();
-    return blockState.setValue(LEVEL, waterLevel <= 0 ? 0 : 1);
+    BlockState blockState = this.getDefaultState();
+    return blockState.with(LEVEL, waterLevel <= 0 ? 0 : 1);
   }
 
   @Override
-  public BlockState getStateForPlacement(BlockItemUseContext context) {
-    TileEntity tileEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-    if (tileEntity instanceof NiceBowlTileEntity) {
-      NiceBowlTileEntity bowl = (NiceBowlTileEntity) tileEntity;
+  public BlockState getPlacementState(ItemPlacementContext context) {
+    BlockEntity blockEntity = context.getWorld().getBlockEntity(context.getBlockPos());
+    if (blockEntity instanceof NiceBowlBlockEntity) {
+      NiceBowlBlockEntity bowl = (NiceBowlBlockEntity) blockEntity;
       return getBlockState(bowl.hasPlayer() ? 1 : 0);
     }
-    return super.getStateForPlacement(context);
+    return super.getPlacementState(context);
   }
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+  protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
     builder.add(LEVEL);
-    super.createBlockStateDefinition(builder);
+    super.appendProperties(builder);
   }
 
   @Override
-  public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-    return shape;
+  public VoxelShape getOutlineShape(BlockState state, BlockView worldIn, BlockPos pos, ShapeContext context) {
+    return SHAPE;
   }
 
   @Override
-  public boolean hasTileEntity(BlockState state) {
-    return true;
+  public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    return new NiceBowlBlockEntity(pos, state);
   }
 
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new NiceBowlTileEntity();
-  }
-
-  @Override
-  public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-    super.playerWillDestroy(world, pos, state, player);
-    if (!world.isClientSide) {
+  public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    super.onBreak(world, pos, state, player);
+    if (!world.isClient) {
       ItemStack drops = new ItemStack(ItemRegistry.niceBowl.get(), 1);
-      TileEntity entity = world.getBlockEntity(pos);
-      if (entity instanceof NiceBowlTileEntity) {
-        NiceBowlTileEntity bowl = (NiceBowlTileEntity) entity;
+      BlockEntity entity = world.getBlockEntity(pos);
+      if (entity instanceof NiceBowlBlockEntity) {
+        NiceBowlBlockEntity bowl = (NiceBowlBlockEntity) entity;
         PlayerUtils.copyPlayerData(bowl, drops);
       }
-      InventoryHelper.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), drops);
+      ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), drops);
     }
   }
 
   @Override
-  public void appendHoverText(ItemStack itemStack, @Nullable IBlockReader reader, List<ITextComponent> text,
-      ITooltipFlag tooltip) {
-    super.appendHoverText(itemStack, reader, text, tooltip);
-    addHoverText(itemStack, text);
+  public void appendTooltip(ItemStack itemStack, @Nullable BlockView reader, List<Text> text,
+      TooltipContext tooltip) {
+    super.appendTooltip(itemStack, reader, text, tooltip);
+    appendTooltip(itemStack, text);
   }
 
   /*
    * @Override
-   * public ActionResultType use(BlockState state, World world, BlockPos pos,
-   * PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
-   * ItemStack itemStack = player.getItemInHand(hand);
+   * public ActionResult onUse(BlockState state, World world, BlockPos pos,
+   * PlayerEntity player, Hand hand, BlockHitResult ray) {
+   * ItemStack itemStack = player.getStackInHand(hand);
    * if (itemStack.getItem() != Items.BUCKET) {
-   * return ActionResultType.PASS;
+   * return ActionResult.PASS;
    * }
    * NiceBowlTileEntity tileEntity = (NiceBowlTileEntity)
    * world.getBlockEntity(pos);
    * if (!tileEntity.hasPlayer()) {
-   * return ActionResultType.PASS;
+   * return ActionResult.PASS;
    * }
    * 
-   * return ActionResultType.SUCCESS;
+   * return ActionResult.SUCCESS;
    * }
    */
 
   /*
    * @Override
-   * public Fluid takeLiquid(IWorld world, BlockPos blockPos, BlockState
+   * public Fluid tryDrainFluid(WorldAccess world, BlockPos blockPos, BlockState
    * blockState) {
    * NiceBowlTileEntity tileEntity = (NiceBowlTileEntity)
    * world.getBlockEntity(blockPos);

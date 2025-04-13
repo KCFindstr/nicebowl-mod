@@ -1,29 +1,29 @@
 package com.rabimimi.nicebowl.potions;
 
 import com.rabimimi.nicebowl.utils.Constants;
-import com.rabimimi.nicebowl.utils.Rand;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.util.math.random.Random;
 
-public class EstrusEffect extends Effect {
+public class EstrusEffect extends StatusEffect {
   public static final int EFFECT_INTERVAL = 64;
 
   public EstrusEffect() {
-    super(EffectType.BENEFICIAL, Constants.ESTRUS_COLOR_INT);
+    super(StatusEffectCategory.BENEFICIAL, Constants.ESTRUS_COLOR_INT);
   }
 
   private int getEffectInterval(int amplifier) {
     return EFFECT_INTERVAL >> amplifier;
   }
 
-  public boolean tryHeal(int amplifier) {
-    return Rand.withProb(Math.max(1, amplifier), 4);
+  public boolean tryHeal(Random random, int amplifier) {
+    return random.nextInt(5) <= amplifier;
   }
 
   @Override
-  public boolean isDurationEffectTick(int duration, int amplifier) {
+  public boolean canApplyUpdateEffect(int duration, int amplifier) {
     int k = getEffectInterval(amplifier);
     if (k > 0) {
       return duration % k == 0;
@@ -33,11 +33,11 @@ public class EstrusEffect extends Effect {
   }
 
   @Override
-  public void applyEffectTick(LivingEntity entity, int amplifier) {
+  public void applyUpdateEffect(LivingEntity entity, int amplifier) {
     float remainHealth = entity.getMaxHealth() - entity.getHealth();
     if (remainHealth <= 0) {
       return;
     }
-    entity.heal(1.0f);
+    entity.heal(0.5f);
   }
 }

@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "level=0": { "model": "nicebowl:block/nicebowl_block" },
-    "level=1": { "model": "nicebowl:block/nicebowl_used_block" }
-  }
-}

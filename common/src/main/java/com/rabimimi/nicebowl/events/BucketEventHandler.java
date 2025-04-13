@@ -1,59 +1,53 @@
 package com.rabimimi.nicebowl.events;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.rabimimi.nicebowl.blocks.NiceBowlBlock;
-import com.rabimimi.nicebowl.blocks.NiceBowlTileEntity;
+import com.rabimimi.nicebowl.blocks.NiceBowlBlockEntity;
 import com.rabimimi.nicebowl.items.ItemRegistry;
-import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerUtils;
 
+import dev.architectury.event.CompoundEventResult;
+import dev.architectury.event.events.common.PlayerEvent;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants.BlockFlags;
-import net.minecraftforge.event.entity.player.FillBucketEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.eventbus.api.Event.Result;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber(modid = Constants.MOD_ID)
 public class BucketEventHandler {
-  @SubscribeEvent
-  public static void onBucketUsed(FillBucketEvent event) {
-    World world = event.getWorld();
-    Vector3d loc = event.getTarget().getLocation();
-    BlockPos pos = new BlockPos(loc.x, loc.y, loc.z);
-    if (event.getEmptyBucket().getItem() != Items.BUCKET) {
-      return;
+
+  private static final int DEFAULT_AND_RERENDER = 11;
+
+  public static void init() {
+    PlayerEvent.FILL_BUCKET.register(BucketEventHandler::onFillBucket);
+  }
+
+  public static CompoundEventResult<ItemStack> onFillBucket(
+      PlayerEntity player,
+      World world,
+      ItemStack stack,
+      @Nullable HitResult target) {
+    if (!(target instanceof BlockHitResult blockHitResult) || player.getWorld().isClient) {
+      return CompoundEventResult.pass();
     }
+    BlockPos pos = blockHitResult.getBlockPos();
     BlockState blockState = world.getBlockState(pos);
-    if (!(blockState.getBlock() instanceof NiceBowlBlock)) {
-      return;
-    }
-    TileEntity entity = world.getBlockEntity(pos);
-    if (!(entity instanceof NiceBowlTileEntity)) {
-      return;
-    }
-    NiceBowlTileEntity tileEntity = (NiceBowlTileEntity) entity;
-    if (!tileEntity.hasPlayer()) {
-      return;
+    if (!(blockState.getBlock() instanceof NiceBowlBlock)
+        || !(world.getBlockEntity(pos) instanceof NiceBowlBlockEntity blockEntity)
+        || !blockEntity.hasPlayer()) {
+      return CompoundEventResult.pass();
     }
     // Collect juice
-    BlockState newBlockState = blockState.setValue(NiceBowlBlock.LEVEL, 0);
-    world.setBlock(pos, newBlockState, BlockFlags.DEFAULT_AND_RERENDER);
+    BlockState newBlockState = blockState.with(NiceBowlBlock.LEVEL, 0);
+    world.setBlockState(pos, newBlockState, DEFAULT_AND_RERENDER);
     ItemStack itemStack = new ItemStack(ItemRegistry.juiceBucket.get());
-    if (!world.isClientSide) {
-      PlayerUtils.copyPlayerData(tileEntity, itemStack);
-      tileEntity.setPlayer(null);
-      event.getPlayer().inventory.setChanged();
-      world.sendBlockUpdated(pos, blockState, newBlockState, BlockFlags.DEFAULT_AND_RERENDER);
-    }
-    event.setFilledBucket(itemStack);
-    event.setResult(Result.ALLOW);
-    event.getPlayer().playSound(SoundEvents.BUCKET_FILL, 1.0F, 1.0F);
+    PlayerUtils.copyPlayerData(blockEntity, itemStack);
+    blockEntity.setPlayer(null);
+    player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
+    return CompoundEventResult.interruptTrue(itemStack);
   }
 }

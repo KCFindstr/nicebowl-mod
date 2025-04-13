@@ -1,17 +1,17 @@
 modLoader = "javafml"
 loaderVersion = "[47,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+issueTrackerURL = "https://github.com/KCFindstr/nicebowl-mod/issues"
+license = "GPL-3.0"
 
 [[mods]]
 modId = "nicebowl"
 version = "${version}"
 displayName = "NiceBowl"
-authors = "Me!"
+authors = "KCFindstr"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Adds a nice bowl to the game.
 '''
-#logoFile = ""
+logoFile = "nicebowl.png"
 
 [[dependencies.nicebowl]]
 modId = "forge"

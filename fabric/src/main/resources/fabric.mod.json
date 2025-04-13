@@ -3,9 +3,9 @@
   "id": "nicebowl",
   "version": "${version}",
   "name": "NiceBowl",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Adds a nice bowl to the game.",
   "authors": [
-    "Me!"
+    "KCFindstr"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.rabimimi.nicebowl.fabric.ExampleModFabric"
+      "com.rabimimi.nicebowl.fabric.NiceBowlModFabric"
     ],
     "client": [
-      "com.rabimimi.nicebowl.fabric.client.ExampleModFabricClient"
+      "com.rabimimi.nicebowl.fabric.client.NiceBowlModFabricClient"
     ]
   },
   "mixins": [

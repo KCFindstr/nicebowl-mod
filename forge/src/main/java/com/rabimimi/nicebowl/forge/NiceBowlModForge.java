@@ -1,16 +1,26 @@
 package com.rabimimi.nicebowl.forge;
 
+import com.rabimimi.nicebowl.NiceBowlMod;
+import com.rabimimi.nicebowl.blocks.BlockRegistry;
+import com.rabimimi.nicebowl.blocks.NiceBowlBlockColor;
+
 import dev.architectury.platform.forge.EventBuses;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod(ExampleMod.MOD_ID)
+@Mod(NiceBowlMod.MOD_ID)
 public final class NiceBowlModForge {
-    public ExampleModForge() {
-        // Submit our event bus to let Architectury API register our content on the right time.
-        EventBuses.registerModEventBus(ExampleMod.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
+  public NiceBowlModForge(FMLJavaModLoadingContext context) {
+    IEventBus modEventBus = context.getModEventBus();
+    EventBuses.registerModEventBus(NiceBowlMod.MOD_ID, modEventBus);
+    NiceBowlMod.init();
+  }
 
-        // Run our common setup.
-        ExampleMod.init();
-    }
+  @SubscribeEvent
+  public void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+    event.register(NiceBowlBlockColor.INSTANCE, BlockRegistry.NICE_BOWL.get());
+  }
 }

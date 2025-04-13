@@ -1,15 +1,15 @@
 package com.rabimimi.nicebowl.potions;
 
-import com.rabimimi.nicebowl.utils.Constants;
+import com.rabimimi.nicebowl.NiceBowlMod;
 
-import net.minecraft.potion.Effect;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.DeferredSupplier;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.registry.RegistryKeys;
 
 public class EffectRegistry {
-  public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS,
-      Constants.MOD_ID);
+  public static final DeferredRegister<StatusEffect> EFFECTS = DeferredRegister.create(NiceBowlMod.MOD_ID,
+      RegistryKeys.STATUS_EFFECT);
 
-  public static RegistryObject<EstrusEffect> estrus = EFFECTS.register("estrus", EstrusEffect::new);
+  public static DeferredSupplier<EstrusEffect> estrus = EFFECTS.register("estrus", EstrusEffect::new);
 }

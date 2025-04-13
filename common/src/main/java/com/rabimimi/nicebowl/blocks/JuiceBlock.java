@@ -6,35 +6,40 @@ import org.jetbrains.annotations.Nullable;
 
 import com.rabimimi.nicebowl.fluids.FluidRegistry;
 
+import dev.architectury.core.block.ArchitecturyLiquidBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 
-public class JuiceBlock extends FlowingFluidBlock {
+public class JuiceBlock extends ArchitecturyLiquidBlock implements BlockEntityProvider {
   public JuiceBlock() {
-    super(FluidRegistry.juice, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
+    super(FluidRegistry.JUICE, Block.Settings.copy(Blocks.WATER).noCollision().strength(100.0F).dropsNothing());
   }
 
   @Override
-  public boolean hasTileEntity(BlockState state) {
-    return true;
+  public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    return new NiceBowlBlockEntity(pos, state);
   }
 
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new NiceBowlTileEntity();
+  public void appendTooltip(ItemStack itemStack, @Nullable BlockView reader, List<Text> text,
+      TooltipContext tooltip) {
+    super.appendTooltip(itemStack, reader, text, tooltip);
+    NiceBowlBlock.appendTooltip(itemStack, text);
   }
 
-  @Override
-  public void appendHoverText(ItemStack itemStack, @Nullable IBlockReader reader, List<ITextComponent> text,
-      ITooltipFlag tooltip) {
-    super.appendHoverText(itemStack, reader, text, tooltip);
-    NiceBowlBlock.addHoverText(itemStack, text);
+  @Nullable
+  public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+    BlockEntity blockEntity = world.getBlockEntity(pos);
+    return blockEntity instanceof NamedScreenHandlerFactory ? (NamedScreenHandlerFactory) blockEntity : null;
   }
 }

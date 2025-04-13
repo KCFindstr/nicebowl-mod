@@ -1,11 +1,11 @@
 package com.rabimimi.nicebowl.utils;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
-import com.rabimimi.nicebowl.blocks.NiceBowlTileEntity;
+import com.rabimimi.nicebowl.blocks.NiceBowlBlockEntity;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NbtCompound;
 
 public class PlayerUtils {
 
@@ -13,7 +13,7 @@ public class PlayerUtils {
     return player != null && player.isValid();
   }
 
-  public static void setPlayer(CompoundNBT tag, PlayerData player) {
+  public static void setPlayer(NbtCompound tag, PlayerData player) {
     if (tag == null) {
       return;
     }
@@ -28,12 +28,12 @@ public class PlayerUtils {
     if (stack == null) {
       return;
     }
-    CompoundNBT tag = stack.getOrCreateTag();
+    NbtCompound tag = stack.getOrCreateNbt();
     setPlayer(tag, player);
-    stack.setTag(tag);
+    stack.setNbt(tag);
   }
 
-  public static void setPlayer(NiceBowlTileEntity entity, PlayerData player) {
+  public static void setPlayer(NiceBowlBlockEntity entity, PlayerData player) {
     if (entity == null) {
       return;
     }
@@ -41,17 +41,17 @@ public class PlayerUtils {
   }
 
   @Nullable
-  public static PlayerData getPlayer(CompoundNBT tag) {
+  public static PlayerData getPlayer(NbtCompound tag) {
     PlayerData ret = new PlayerData(tag);
     return ret.isValid() ? ret : null;
   }
 
   @Nullable
   public static PlayerData getPlayer(ItemStack stack) {
-    if (!stack.hasTag()) {
+    if (!stack.hasNbt()) {
       return null;
     }
-    CompoundNBT tag = stack.getTag();
+    NbtCompound tag = stack.getNbt();
     return getPlayer(tag);
   }
 
@@ -63,12 +63,12 @@ public class PlayerUtils {
     if (!isValid(player)) {
       return;
     }
-    CompoundNBT target = dest.getOrCreateTag();
+    NbtCompound target = dest.getOrCreateNbt();
     player.saveTo(target);
-    dest.setTag(target);
+    dest.setNbt(target);
   }
 
-  public static void copyPlayerData(ItemStack src, NiceBowlTileEntity dest) {
+  public static void copyPlayerData(ItemStack src, NiceBowlBlockEntity dest) {
     if (src == null || dest == null)
       return;
     PlayerData player = getPlayer(src);
@@ -78,14 +78,14 @@ public class PlayerUtils {
     setPlayer(dest, player);
   }
 
-  public static void copyPlayerData(NiceBowlTileEntity src, NiceBowlTileEntity dest) {
+  public static void copyPlayerData(NiceBowlBlockEntity src, NiceBowlBlockEntity dest) {
     if (src == null || dest == null || !src.hasPlayer()) {
       return;
     }
     setPlayer(dest, src.getPlayer());
   }
 
-  public static void copyPlayerData(NiceBowlTileEntity src, ItemStack dest) {
+  public static void copyPlayerData(NiceBowlBlockEntity src, ItemStack dest) {
     if (src == null || dest == null || !src.hasPlayer()) {
       return;
     }

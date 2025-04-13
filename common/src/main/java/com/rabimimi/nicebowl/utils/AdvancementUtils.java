@@ -1,38 +1,37 @@
 package com.rabimimi.nicebowl.utils;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementManager;
-import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import com.rabimimi.nicebowl.NiceBowlMod;
+
+import net.minecraft.advancement.Advancement;
+import net.minecraft.advancement.AdvancementProgress;
+import net.minecraft.advancement.PlayerAdvancementTracker;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 
 public class AdvancementUtils {
-  public static final ResourceLocation RECEIVE_NICEBOWL = new ResourceLocation(Constants.MOD_ID,
-      "actions/receive_nicebowl");
-  public static final ResourceLocation SEND_NICEBOWL = new ResourceLocation(Constants.MOD_ID, "actions/send_nicebowl");
-  public static final ResourceLocation BLOCK_PROJECTILE = new ResourceLocation(Constants.MOD_ID,
-      "actions/block_projectile");
+  public static final Identifier RECEIVE_NICEBOWL = NiceBowlMod.id("actions/receive_nicebowl");
+  public static final Identifier SEND_NICEBOWL = NiceBowlMod.id("actions/send_nicebowl");
+  public static final Identifier BLOCK_PROJECTILE = NiceBowlMod.id("actions/block_projectile");
 
-  public static void grantAdvancement(ServerPlayerEntity player, ResourceLocation advancementLoc) {
-    AdvancementManager manager = player.getServer().getAdvancements();
-    if (manager == null) {
+  public static void grantAdvancement(ServerPlayerEntity player, Identifier advancementLoc) {
+    var advLoader = player.getServer().getAdvancementLoader();
+    if (advLoader == null) {
       return;
     }
-    Advancement advancement = manager.getAdvancement(advancementLoc);
+    Advancement advancement = advLoader.get(advancementLoc);
     if (advancement == null) {
       return;
     }
-    PlayerAdvancements playerAdvancements = player.getAdvancements();
+    PlayerAdvancementTracker playerAdvancements = player.getAdvancementTracker();
     if (playerAdvancements == null) {
       return;
     }
-    AdvancementProgress progress = playerAdvancements.getOrStartProgress(advancement);
+    AdvancementProgress progress = playerAdvancements.getProgress(advancement);
     if (progress.isDone()) {
       return;
     }
-    for (String criterion : progress.getRemainingCriteria()) {
-      playerAdvancements.award(advancement, criterion);
+    for (String criterion : progress.getUnobtainedCriteria()) {
+      playerAdvancements.grantCriterion(advancement, criterion);
     }
   }
 }
