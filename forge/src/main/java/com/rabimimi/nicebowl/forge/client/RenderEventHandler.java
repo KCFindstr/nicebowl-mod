@@ -11,7 +11,7 @@ import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber(modid = NiceBowlMod.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = NiceBowlMod.MOD_ID, value = Dist.CLIENT)
 public class RenderEventHandler {
 
   @SubscribeEvent(receiveCanceled = true)
