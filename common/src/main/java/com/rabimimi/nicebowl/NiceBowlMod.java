@@ -9,14 +9,13 @@ import com.rabimimi.nicebowl.blocks.BlockEntityRegistry;
 import com.rabimimi.nicebowl.fluids.FluidRegistry;
 import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.potions.EffectRegistry;
-import com.rabimimi.nicebowl.utils.Constants;
 
 import net.minecraft.util.Identifier;
 
 public class NiceBowlMod {
 
-  public static final String MOD_ID = Constants.MOD_ID;
-  public static Logger LOGGER = LogManager.getLogger(NiceBowlMod.MOD_ID);
+  public static final String MOD_ID = "nicebowl";
+  public static final Logger LOGGER = LogManager.getLogger(NiceBowlMod.MOD_ID);
 
   public static Identifier id(String path) {
     return new Identifier(MOD_ID, path);

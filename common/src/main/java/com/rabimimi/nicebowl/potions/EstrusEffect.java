@@ -8,7 +8,7 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.util.math.random.Random;
 
 public class EstrusEffect extends StatusEffect {
-  public static final int EFFECT_INTERVAL = 64;
+  public static final int EFFECT_INTERVAL = 60;
 
   public EstrusEffect() {
     super(StatusEffectCategory.BENEFICIAL, Constants.ESTRUS_COLOR_INT);

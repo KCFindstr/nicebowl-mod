@@ -2,6 +2,7 @@ package com.rabimimi.nicebowl.fluids;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
+import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.utils.Constants;
 
 import net.minecraft.fluid.FlowableFluid;
@@ -18,25 +19,22 @@ public class FluidRegistry {
   public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(
       NiceBowlMod.MOD_ID, RegistryKeys.FLUID);
 
-  private static final Identifier FLUID_STILL = new Identifier(NiceBowlMod.MOD_ID, "fluid/juice_still");
-  private static final Identifier FLUID_FLOW = new Identifier(NiceBowlMod.MOD_ID, "fluid/juice_flow");
+  private static final Identifier FLUID_STILL = new Identifier(NiceBowlMod.MOD_ID, "block/juice_still");
+  private static final Identifier FLUID_FLOW = new Identifier(NiceBowlMod.MOD_ID, "block/juice_flow");
 
-  public static RegistrySupplier<FlowableFluid> JUICE;
-  public static RegistrySupplier<FlowableFluid> JUICE_FLOWING;
+  public static final RegistrySupplier<FlowableFluid> JUICE = FLUIDS.register("juice",
+      () -> new ArchitecturyFlowingFluid.Source(FluidRegistry.JUICE_ATTRIBUTES));
+  public static final RegistrySupplier<FlowableFluid> FLOWING_JUICE = FLUIDS.register("flowing_juice",
+      () -> new ArchitecturyFlowingFluid.Flowing(FluidRegistry.JUICE_ATTRIBUTES));
 
   public static final ArchitecturyFluidAttributes JUICE_ATTRIBUTES = SimpleArchitecturyFluidAttributes.ofSupplier(
-      () -> JUICE_FLOWING,
+      () -> FLOWING_JUICE,
       () -> JUICE)
       .sourceTexture(FLUID_STILL)
       .flowingTexture(FLUID_FLOW)
+      .bucketItem(ItemRegistry.JUICE_BUCKET)
+      .block(BlockRegistry.JUICE)
       .color(Constants.JUICE_COLOR_TINT)
       .viscosity(2000)
       .block(BlockRegistry.JUICE);
-
-  static {
-    JUICE = FLUIDS.register("juice",
-        () -> new ArchitecturyFlowingFluid.Source(JUICE_ATTRIBUTES));
-    JUICE_FLOWING = FLUIDS.register("juice_flow",
-        () -> new ArchitecturyFlowingFluid.Flowing(JUICE_ATTRIBUTES));
-  }
 }

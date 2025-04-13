@@ -70,8 +70,7 @@ public class NiceBowlBlock extends BlockWithEntity {
   @Override
   public BlockState getPlacementState(ItemPlacementContext context) {
     BlockEntity blockEntity = context.getWorld().getBlockEntity(context.getBlockPos());
-    if (blockEntity instanceof NiceBowlBlockEntity) {
-      NiceBowlBlockEntity bowl = (NiceBowlBlockEntity) blockEntity;
+    if (blockEntity instanceof NiceBowlBlockEntity bowl) {
       return getBlockState(bowl.hasPlayer() ? 1 : 0);
     }
     return super.getPlacementState(context);
@@ -97,7 +96,7 @@ public class NiceBowlBlock extends BlockWithEntity {
   public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
     super.onBreak(world, pos, state, player);
     if (!world.isClient) {
-      ItemStack drops = new ItemStack(ItemRegistry.niceBowl.get(), 1);
+      ItemStack drops = new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
       BlockEntity entity = world.getBlockEntity(pos);
       if (entity instanceof NiceBowlBlockEntity) {
         NiceBowlBlockEntity bowl = (NiceBowlBlockEntity) entity;

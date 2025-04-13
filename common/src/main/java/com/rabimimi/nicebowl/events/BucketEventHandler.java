@@ -44,7 +44,7 @@ public class BucketEventHandler {
     // Collect juice
     BlockState newBlockState = blockState.with(NiceBowlBlock.LEVEL, 0);
     world.setBlockState(pos, newBlockState, DEFAULT_AND_RERENDER);
-    ItemStack itemStack = new ItemStack(ItemRegistry.juiceBucket.get());
+    ItemStack itemStack = new ItemStack(ItemRegistry.JUICE_BUCKET.get());
     PlayerUtils.copyPlayerData(blockEntity, itemStack);
     blockEntity.setPlayer(null);
     player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);

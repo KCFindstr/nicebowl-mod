@@ -11,7 +11,6 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -31,13 +30,14 @@ public class ItemRegistry {
   public static final RegistrySupplier<ItemGroup> NICE_BOWL_GROUP = TABS.register(NiceBowlMod.MOD_ID,
       () -> CreativeTabRegistry
           .create(Text.translatable("itemGroup.nicebowl.nicebowl_group"),
-              () -> new ItemStack(ItemRegistry.niceBowl.get())));
+              () -> new ItemStack(ItemRegistry.NICE_BOWL.get())));
 
-  public static final RegistrySupplier<ArmorItem> niceBowl = ITEMS.register("nicebowl", NiceBowl::new);
-  public static final RegistrySupplier<Item> estrus = ITEMS.register("estrus", () -> new Item(defaultSetting()));
-  public static final RegistrySupplier<ArmorItem> niceBowlHead = ITEMS.register("nicebowl_head", NiceBowlHead::new);
-  public static final RegistrySupplier<BucketItem> juiceBucket = ITEMS.register("juice_bucket", JuiceBucket::new);
-  public static final RegistrySupplier<BlockItem> niceBowlBlock = ITEMS.register("nicebowl_block",
+  public static final RegistrySupplier<ArmorItem> NICE_BOWL = ITEMS.register("nicebowl", NiceBowl::new);
+  // Keep for advancements
+  public static final RegistrySupplier<Item> ESTRUS = ITEMS.register("estrus", () -> new Item(new Item.Settings()));
+  public static final RegistrySupplier<ArmorItem> NICE_BOWL_HEAD = ITEMS.register("nicebowl_head", NiceBowlHead::new);
+  public static final RegistrySupplier<Item> JUICE_BUCKET = ITEMS.register("juice_bucket", JuiceBucket::new);
+  public static final RegistrySupplier<BlockItem> NICE_BOWL_BLOCK = ITEMS.register("nicebowl_block",
       () -> new BlockItem(BlockRegistry.NICE_BOWL.get(), defaultSetting()));
 
   public static Item.Settings defaultSetting() {
@@ -49,7 +49,7 @@ public class ItemRegistry {
     Identifier used = NiceBowlMod.id("used");
     ClampedModelPredicateProvider usedPredicate = (ItemStack stack, @Nullable ClientWorld world,
         @Nullable LivingEntity entity, int seed) -> PlayerUtils.getPlayer(stack) == null ? 0 : 1;
-    ItemPropertiesRegistry.register(niceBowl.get(), used, usedPredicate);
-    ItemPropertiesRegistry.register(niceBowlHead.get(), used, usedPredicate);
+    ItemPropertiesRegistry.register(NICE_BOWL.get(), used, usedPredicate);
+    ItemPropertiesRegistry.register(NICE_BOWL_HEAD.get(), used, usedPredicate);
   }
 }

@@ -17,7 +17,7 @@ public enum NicebowlArmorMaterial implements ArmorMaterial {
       SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
       0.0F,
       0.1F,
-      () -> Ingredient.ofItems(Items.WHITE_WOOL));
+      () -> Ingredient.ofItems(Items.WHITE_WOOL, Items.LIGHT_BLUE_WOOL));
 
   private static final int[] BASE_DURABILITY = new int[] { 13, 15, 16, 11 };
   private final String name;
