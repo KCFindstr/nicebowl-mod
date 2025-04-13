@@ -6,11 +6,12 @@ import com.rabimimi.nicebowl.events.PlayerEventHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.FogShape;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber(modid = NiceBowlMod.MOD_ID)
+@EventBusSubscriber(modid = NiceBowlMod.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class RenderEventHandler {
 
   @SubscribeEvent(receiveCanceled = true)
