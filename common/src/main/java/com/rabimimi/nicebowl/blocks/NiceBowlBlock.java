@@ -9,16 +9,15 @@ import com.rabimimi.nicebowl.utils.PlayerData;
 import com.rabimimi.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.block.entity.BlockEntity;
@@ -33,7 +32,7 @@ import net.minecraft.util.ItemScatterer;
 
 public class NiceBowlBlock extends BlockWithEntity {
   private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-  public static IntProperty LEVEL = IntProperty.of("level", 0, 1);
+  public static final IntProperty LEVEL = IntProperty.of("level", 0, 1);
 
   @Nullable
   public static Text getHoverText(NbtCompound tag) {
@@ -58,7 +57,7 @@ public class NiceBowlBlock extends BlockWithEntity {
   }
 
   public NiceBowlBlock() {
-    super(Settings.copy(Blocks.CYAN_WOOL).requiresTool().strength(1).nonOpaque().sounds(BlockSoundGroup.WOOL));
+    super(Settings.copy(Blocks.CYAN_WOOL).requiresTool().strength(1).nonOpaque());
     this.setDefaultState(this.stateManager.getDefaultState().with(LEVEL, 0));
   }
 
@@ -68,22 +67,14 @@ public class NiceBowlBlock extends BlockWithEntity {
   }
 
   @Override
-  public BlockState getPlacementState(ItemPlacementContext context) {
-    BlockEntity blockEntity = context.getWorld().getBlockEntity(context.getBlockPos());
-    if (blockEntity instanceof NiceBowlBlockEntity bowl) {
-      return getBlockState(bowl.hasPlayer() ? 1 : 0);
-    }
-    return super.getPlacementState(context);
-  }
-
-  @Override
   protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
     builder.add(LEVEL);
     super.appendProperties(builder);
   }
 
   @Override
-  public VoxelShape getOutlineShape(BlockState state, BlockView worldIn, BlockPos pos, ShapeContext context) {
+  public VoxelShape getOutlineShape(BlockState state, BlockView worldIn,
+      BlockPos pos, ShapeContext context) {
     return SHAPE;
   }
 
@@ -93,17 +84,22 @@ public class NiceBowlBlock extends BlockWithEntity {
   }
 
   @Override
+  public BlockRenderType getRenderType(BlockState state) {
+    return BlockRenderType.MODEL;
+  }
+
+  @Override
   public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
     super.onBreak(world, pos, state, player);
-    if (!world.isClient) {
-      ItemStack drops = new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
-      BlockEntity entity = world.getBlockEntity(pos);
-      if (entity instanceof NiceBowlBlockEntity) {
-        NiceBowlBlockEntity bowl = (NiceBowlBlockEntity) entity;
-        PlayerUtils.copyPlayerData(bowl, drops);
-      }
-      ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), drops);
+    if (world.isClient)
+      return;
+    ItemStack drops = new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
+    BlockEntity entity = world.getBlockEntity(pos);
+    if (entity instanceof NiceBowlBlockEntity) {
+      NiceBowlBlockEntity bowl = (NiceBowlBlockEntity) entity;
+      PlayerUtils.copyPlayerData(bowl, drops);
     }
+    ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), drops);
   }
 
   @Override

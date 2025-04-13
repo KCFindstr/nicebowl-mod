@@ -10,7 +10,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 public final class NiceBowlModFabricClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
-    ColorProviderRegistry.BLOCK.register(NiceBowlBlockColor.INSTANCE, BlockRegistry.NICE_BOWL.get());
+    ColorProviderRegistry.BLOCK.register(NiceBowlBlockColor.INSTANCE,
+        BlockRegistry.NICE_BOWL.get());
 
     NiceBowlClient.onInitializeClient();
   }

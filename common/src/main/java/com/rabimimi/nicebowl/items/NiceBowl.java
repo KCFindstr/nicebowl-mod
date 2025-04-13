@@ -61,21 +61,20 @@ public class NiceBowl extends ArmorItem {
       return ActionResult.FAIL;
     }
     PlayerData player = PlayerUtils.getPlayer(stack);
-    NiceBowlBlock created = BlockRegistry.NICE_BOWL.get();
-    BlockState newBlockstate = created.getBlockState(PlayerUtils.isValid(player) ? 1 : 0);
+    NiceBowlBlock nicebowl = BlockRegistry.NICE_BOWL.get();
+    BlockState newBlockstate = nicebowl.getBlockState(PlayerUtils.isValid(player) ? 1 : 0);
     world.setBlockState(blockpos, newBlockstate);
     if (!world.isClient) {
       if (PlayerUtils.isValid(player)) {
         BlockEntity blockEntity = world.getBlockEntity(blockpos);
-        if (blockEntity instanceof NiceBowlBlockEntity) {
-          NiceBowlBlockEntity entity = (NiceBowlBlockEntity) blockEntity;
+        if (blockEntity instanceof NiceBowlBlockEntity entity) {
           entity.setPlayer(player);
           world.updateListeners(blockpos, blockstate, newBlockstate, 3);
         }
       }
+      context.getPlayer().playSound(SoundEvents.BLOCK_WOOL_PLACE, 1.0F, 1.0F);
+      stack.decrement(1);
     }
-    context.getPlayer().playSound(SoundEvents.BLOCK_WOOL_PLACE, 1.0F, 1.0F);
-    stack.decrement(1);
     return ActionResult.SUCCESS;
   }
 
