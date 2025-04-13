@@ -9,6 +9,7 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import dev.architectury.core.fluid.ArchitecturyFlowingFluid;
 import dev.architectury.core.fluid.ArchitecturyFluidAttributes;
 import dev.architectury.core.fluid.SimpleArchitecturyFluidAttributes;
@@ -35,6 +36,9 @@ public class FluidRegistry {
       .bucketItem(ItemRegistry.JUICE_BUCKET)
       .block(BlockRegistry.JUICE)
       .color(Constants.JUICE_COLOR_TINT)
+      .rarity(Rarity.UNCOMMON)
       .viscosity(2000)
+      .temperature(310)
+      .convertToSource(false)
       .block(BlockRegistry.JUICE);
 }
