@@ -14,4 +14,8 @@ public final class NiceBowlModForge {
     EventBuses.registerModEventBus(NiceBowlMod.MOD_ID, modEventBus);
     NiceBowlMod.init();
   }
+
+  public NiceBowlModForge() {
+    this(FMLJavaModLoadingContext.get());
+  }
 }
