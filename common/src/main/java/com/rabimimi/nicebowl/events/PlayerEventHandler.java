@@ -10,7 +10,6 @@ import com.rabimimi.nicebowl.potions.EstrusEffect;
 import com.rabimimi.nicebowl.utils.AdvancementUtils;
 import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
-import com.rabimimi.nicebowl.utils.PlayerUtils;
 
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
@@ -41,11 +40,11 @@ public class PlayerEventHandler {
   }
 
   private static void onWakeUpSkipNight(ServerPlayerEntity player) {
-    NiceBowlMod.LOGGER.info("Player {} woke up", player.getDisplayName().getString());
+    NiceBowlMod.LOGGER.debug("Player {} woke up", player.getDisplayName().getString());
     ItemStack itemStack = player.getEquippedStack(EquipmentSlot.LEGS);
     if (itemStack.getItem() instanceof NiceBowl) {
-      PlayerData playerData = new PlayerData(player);
-      PlayerUtils.setPlayer(itemStack, playerData);
+      var stackPlayerData = PlayerData.container(itemStack);
+      stackPlayerData.setPlayerData(PlayerData.from(player));
       player.getInventory().markDirty();
     }
   }
@@ -66,12 +65,13 @@ public class PlayerEventHandler {
     if (thrower.equals(player)) {
       return;
     }
-    PlayerData itemOwner = PlayerUtils.getPlayer(stack);
-    if (PlayerUtils.isEmpty(itemOwner)) {
+    var playerData = PlayerData.container(stack).getPlayerData();
+    if (playerData.isEmpty() || playerData.get().isEmpty()) {
       return;
     }
-    NiceBowlMod.LOGGER.info("Nicebowl is from {}" + itemOwner.uid);
-    if (!itemOwner.uid.equals(thrower.getUuidAsString())) {
+    PlayerData itemOwner = playerData.get();
+    NiceBowlMod.LOGGER.info("Nicebowl is owned by {}" + itemOwner.name());
+    if (!thrower.getUuid().equals(itemOwner.uuid())) {
       return;
     }
     AdvancementUtils.grantAdvancement(serverPlayer, AdvancementUtils.RECEIVE_NICEBOWL);

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
-import com.rabimimi.nicebowl.utils.PlayerUtils;
+import com.rabimimi.nicebowl.utils.PlayerData;
 
 import net.minecraft.client.item.ClampedModelPredicateProvider;
 import net.minecraft.client.world.ClientWorld;
@@ -49,7 +49,9 @@ public class ItemRegistry {
     // Register item properties
     Identifier used = NiceBowlMod.id("used");
     ClampedModelPredicateProvider usedPredicate = (ItemStack stack, @Nullable ClientWorld world,
-        @Nullable LivingEntity entity, int seed) -> PlayerUtils.getPlayer(stack) == null ? 0 : 1;
+        @Nullable LivingEntity entity, int seed) -> {
+      return PlayerData.container(stack).hasPlayerData() ? 1 : 0;
+    };
     ItemPropertiesRegistry.register(NICE_BOWL.get(), used, usedPredicate);
     ItemPropertiesRegistry.register(NICE_BOWL_HEAD.get(), used, usedPredicate);
   }

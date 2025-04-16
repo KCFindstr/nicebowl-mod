@@ -22,7 +22,9 @@
             "predicate": {
               "equipment": {
                 "legs": {
-                  "item": "nicebowl:nicebowl"
+                    "items": [
+                      "nicebowl:nicebowl"
+                    ]
                 }
               }
             }

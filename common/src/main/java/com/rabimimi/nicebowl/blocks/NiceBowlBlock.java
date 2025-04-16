@@ -5,9 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import com.rabimimi.nicebowl.items.ItemRegistry;
-import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
-import com.rabimimi.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -20,7 +18,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
@@ -41,40 +38,22 @@ public class NiceBowlBlock extends BlockWithEntity {
   private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
   public static final IntProperty LEVEL = IntProperty.of("level", 0, 1);
 
-  @Nullable
-  public static Text getHoverText(NbtCompound tag) {
-    PlayerData player = PlayerUtils.getPlayer(tag);
-    MutableText txt = null;
-    if (PlayerUtils.isEmpty(player)) {
-      txt = Text.translatable("tooltip.nicebowl.none");
-    } else {
-      txt = Text.translatable("tooltip.nicebowl.player", player.name);
-    }
-    if (txt != null) {
-      txt = txt.fillStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFF99FF)));
-    }
-    return txt;
-  }
-
-  public static void appendTooltip(ItemStack itemStack, List<Text> text) {
-    if (!itemStack.hasNbt()) {
+  public static void appendTooltip(ItemStack itemStack, List<Text> text, String keyNone, String keyPlayer) {
+    var playerDataOptional = PlayerData.container(itemStack).getPlayerData();
+    if (playerDataOptional.isEmpty())
       return;
-    }
-    NbtCompound tag = itemStack.getNbt();
-    Text txt = getHoverText(tag);
-    if (txt != null) {
-      text.add(txt);
-    }
+
+    var playerData = playerDataOptional.get();
+    MutableText txt = playerData.isEmpty()
+        ? Text.translatable(keyNone)
+        : Text.translatable(keyPlayer, playerData.name());
+    txt = txt.fillStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFF99FF)));
+    text.add(txt);
   }
 
   public NiceBowlBlock() {
     super(Settings.copy(Blocks.CYAN_WOOL).nonOpaque());
     this.setDefaultState(this.stateManager.getDefaultState().with(LEVEL, 0));
-  }
-
-  public BlockState getBlockState(int waterLevel) {
-    BlockState blockState = this.getDefaultState();
-    return blockState.with(LEVEL, waterLevel <= 0 ? 0 : 1);
   }
 
   @Override
@@ -106,7 +85,7 @@ public class NiceBowlBlock extends BlockWithEntity {
       return;
     ItemStack drops = new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
     if (world.getBlockEntity(pos) instanceof NiceBowlBlockEntity bowl) {
-      PlayerUtils.copyPlayerData(bowl, drops);
+      bowl.copyPlayerDataTo(PlayerData.container(drops));
     }
     dropStack(world, pos, drops);
   }
@@ -115,7 +94,9 @@ public class NiceBowlBlock extends BlockWithEntity {
   public void appendTooltip(ItemStack itemStack, @Nullable BlockView reader, List<Text> text,
       TooltipContext tooltip) {
     super.appendTooltip(itemStack, reader, text, tooltip);
-    appendTooltip(itemStack, text);
+    appendTooltip(itemStack, text,
+        "tooltip.nicebowl.none",
+        "tooltip.nicebowl.player");
   }
 
   @Override
@@ -127,11 +108,7 @@ public class NiceBowlBlock extends BlockWithEntity {
     }
     if (stack.getItem() == ItemRegistry.JUICE_BUCKET.get() && state.get(LEVEL) == 0) {
       if (!world.isClient) {
-        PlayerUtils.copyPlayerData(stack, blockEntity);
-        if (blockEntity.getPlayer() == null) {
-          blockEntity.setPlayer(PlayerData.EMPTY);
-        }
-        world.setBlockState(pos, state.with(LEVEL, 1), Constants.DEFAULT_AND_RERENDER);
+        PlayerData.container(stack).copyPlayerDataTo(blockEntity);
         ItemStack emptiedStack = BucketItem.getEmptiedStack(stack, player);
         player.setStackInHand(hand, emptiedStack);
         world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, player.getSoundCategory());
@@ -141,9 +118,8 @@ public class NiceBowlBlock extends BlockWithEntity {
     if (stack.getItem() == Items.BUCKET && state.get(LEVEL) == 1) {
       if (!world.isClient) {
         ItemStack newStack = new ItemStack(ItemRegistry.JUICE_BUCKET.get());
-        PlayerUtils.copyPlayerData(blockEntity, newStack);
-        world.setBlockState(pos, state.with(LEVEL, 0), Constants.DEFAULT_AND_RERENDER);
-        blockEntity.setPlayer(null);
+        blockEntity.copyPlayerDataTo(PlayerData.container(newStack));
+        blockEntity.clearPlayerData();
         player.setStackInHand(hand, newStack);
         world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, player.getSoundCategory());
       }

@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
 import com.rabimimi.nicebowl.blocks.NiceBowlBlock;
-import com.rabimimi.nicebowl.blocks.NiceBowlBlockEntity;
 import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
-import com.rabimimi.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
@@ -45,8 +44,10 @@ public class NiceBowl extends ArmorItem {
   @Override
   public void appendTooltip(ItemStack itemStack, @Nullable World world, List<Text> text,
       TooltipContext tooltip) {
-    NiceBowlBlock.appendTooltip(itemStack, text);
     super.appendTooltip(itemStack, world, text, tooltip);
+    NiceBowlBlock.appendTooltip(itemStack, text,
+        "tooltip.nicebowl.none",
+        "tooltip.nicebowl.player");
   }
 
   public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity entity) {
@@ -87,15 +88,18 @@ public class NiceBowl extends ArmorItem {
       return ActionResult.FAIL;
     }
     if (!world.isClient) {
-      PlayerData player = PlayerUtils.getPlayer(stack);
+      var stackPlayerData = PlayerData.container(stack);
       NiceBowlBlock nicebowl = BlockRegistry.NICE_BOWL.get();
-      BlockState newBlockstate = nicebowl.getBlockState(player == null ? 0 : 1);
+      BlockState newBlockstate = nicebowl.getDefaultState();
       world.setBlockState(blockpos, newBlockstate, Constants.DEFAULT_AND_RERENDER);
-      if (world.getBlockEntity(blockpos) instanceof NiceBowlBlockEntity entity) {
-        entity.setPlayer(player);
+      if (world.getBlockEntity(blockpos) instanceof PlayerData.IContainer container) {
+        stackPlayerData.copyPlayerDataTo(container);
+      } else {
+        NiceBowlMod.LOGGER.warn("Created nicebowl block {} does not have a valid entity!", blockpos);
       }
       world.playSound(null, blockpos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS);
       stack.decrement(1);
+      context.getPlayer().getInventory().markDirty();
     }
     return ActionResult.SUCCESS;
   }

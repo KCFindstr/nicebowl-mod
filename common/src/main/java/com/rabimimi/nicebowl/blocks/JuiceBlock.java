@@ -34,7 +34,9 @@ public class JuiceBlock extends ArchitecturyLiquidBlock implements BlockEntityPr
   public void appendTooltip(ItemStack itemStack, @Nullable BlockView reader, List<Text> text,
       TooltipContext tooltip) {
     super.appendTooltip(itemStack, reader, text, tooltip);
-    NiceBowlBlock.appendTooltip(itemStack, text);
+    NiceBowlBlock.appendTooltip(itemStack, text,
+        "tooltip.nicebowl.none",
+        "tooltip.nicebowl.player");
   }
 
   @Nullable

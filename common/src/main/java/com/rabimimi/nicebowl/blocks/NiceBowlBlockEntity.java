@@ -1,9 +1,11 @@
 package com.rabimimi.nicebowl.blocks;
 
+import java.util.Optional;
+
 import org.jetbrains.annotations.Nullable;
 
+import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
-import com.rabimimi.nicebowl.utils.PlayerUtils;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -13,21 +15,11 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 
-public class NiceBowlBlockEntity extends BlockEntity {
-  private PlayerData player;
+public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.IContainer {
+  private Optional<PlayerData> playerData = Optional.empty();
 
   public NiceBowlBlockEntity(BlockPos pos, BlockState state) {
     super(BlockEntityRegistry.NICE_BOWL_BLOCK_ENTITY.get(), pos, state);
-  }
-
-  public void setPlayer(PlayerData player) {
-    this.player = player;
-    markDirty();
-  }
-
-  @Nullable
-  public PlayerData getPlayer() {
-    return player;
   }
 
   @Nullable
@@ -46,12 +38,26 @@ public class NiceBowlBlockEntity extends BlockEntity {
   @Override
   public void readNbt(NbtCompound tag) {
     super.readNbt(tag);
-    setPlayer(PlayerUtils.getPlayer(tag));
+    setPlayerData(PlayerData.from(tag));
   }
 
   @Override
   protected void writeNbt(NbtCompound tag) {
     super.writeNbt(tag);
-    PlayerUtils.setPlayer(tag, player);
+    PlayerData.saveTo(playerData, tag);
   }
+
+  // #region PlayerData.IContainer
+  public void setPlayerData(Optional<PlayerData> playerData) {
+    this.playerData = playerData;
+    getWorld().setBlockState(pos,
+        getCachedState().with(NiceBowlBlock.LEVEL, playerData.isPresent() ? 1 : 0),
+        Constants.DEFAULT_AND_RERENDER);
+    markDirty();
+  }
+
+  public Optional<PlayerData> getPlayerData() {
+    return playerData;
+  }
+  // #endregion PlayerData.IContainer
 }
