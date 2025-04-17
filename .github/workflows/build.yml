@@ -50,17 +50,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Built Jars
-          path: |
-            fabric/*.jar
-            forge/*.jar
+          path: '*.jar'
       - name: release
         uses: softprops/action-gh-release@v2
         if: github.ref_type == 'tag'
         with:
           files: |
             LICENSE
-            fabric/*.jar
-            forge/*.jar
+            *.jar
       - name: upload build reports
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
