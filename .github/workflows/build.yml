@@ -39,9 +39,12 @@ jobs:
       - name: build
         run: ./gradlew build
       - name: copy artifacts to root
-        run: |
-          cp ./fabric/build/libs/*.jar ./fabric/
-          cp ./forge/build/libs/*.jar ./forge/
+        run: "find './fabric/build/libs' './forge/build/libs'
+            -maxdepth 1
+            -name '*.jar'
+            ! -name '*-dev-shadow.jar'
+            ! -name '*-sources.jar'
+            -exec cp -t ./ {} +"
       - name: capture build artifacts
         if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
         uses: actions/upload-artifact@v4
