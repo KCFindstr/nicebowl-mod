@@ -1,14 +1,37 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "nicebowl:item/nicebowl_head"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "nicebowl:used": 1
-      },
-      "model": "nicebowl:item/nicebowl_head_used"
-    }
-  ]
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "nicebowl:item/nicebowl_head"
+	},
+	"overrides": [
+		{"predicate": {"nicebowl:used": 1}, "model": "nicebowl:item/nicebowl_head_used"}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 1.75, 0],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 1.75, 0],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 0, 25],
+			"translation": [0, 1, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 0, 25],
+			"translation": [0, 1, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [0, 0, 34]
+		},
+		"head": {
+			"rotation": [-89, 0, 26],
+			"translation": [-2.75, 6.75, -2.5]
+		}
+	}
 }

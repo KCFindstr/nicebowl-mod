@@ -1,6 +1,18 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "nicebowl:item/juice_bucket"
-  }
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "nicebowl:item/juice_bucket"
+	},
+	"display": {
+		"ground": {
+			"translation": [0, 2.5, 0]
+		},
+		"gui": {
+			"rotation": [0, 0, 26]
+		},
+		"fixed": {
+			"rotation": [0, 0, -16]
+		}
+	}
 }
