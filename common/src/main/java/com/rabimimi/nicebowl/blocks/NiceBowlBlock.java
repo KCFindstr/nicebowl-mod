@@ -142,7 +142,7 @@ public class NiceBowlBlock extends BlockWithEntity {
     ServerPlayerEntity target = world.getServer().getPlayerManager().getPlayer(data.uuid());
     if (target == null || !target.isAlive())
       return;
-    AdvancementUtils.grantAdvancement(player, AdvancementUtils.NICEBOWL_TRANSPORT);
+    AdvancementUtils.grantAdvancement(player, AdvancementUtils.NICEBOWL_TELEPORT);
     player.teleport(target.getServerWorld(),
         target.getX(), target.getY(), target.getZ(),
         Collections.emptySet(), target.getYaw(), target.getPitch());
