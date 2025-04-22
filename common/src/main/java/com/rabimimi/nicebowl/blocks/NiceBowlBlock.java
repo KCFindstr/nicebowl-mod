@@ -1,11 +1,13 @@
 package com.rabimimi.nicebowl.blocks;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.items.ItemRegistry;
+import com.rabimimi.nicebowl.utils.AdvancementUtils;
 import com.rabimimi.nicebowl.utils.PlayerData;
 
 import net.minecraft.block.Block;
@@ -21,7 +23,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -133,7 +134,7 @@ public class NiceBowlBlock extends BlockWithEntity {
     return ActionResult.PASS;
   }
 
-  private void maybeTeleport(ServerWorld world, PlayerEntity player, PlayerData data) {
+  private void maybeTeleport(ServerWorld world, ServerPlayerEntity player, PlayerData data) {
     if (data == null || data.isEmpty())
       return;
     if (data.uuid().equals(player.getUuid()))
@@ -141,9 +142,10 @@ public class NiceBowlBlock extends BlockWithEntity {
     ServerPlayerEntity target = world.getServer().getPlayerManager().getPlayer(data.uuid());
     if (target == null || !target.isAlive())
       return;
+    AdvancementUtils.grantAdvancement(player, AdvancementUtils.NICEBOWL_TRANSPORT);
     player.teleport(target.getServerWorld(),
         target.getX(), target.getY(), target.getZ(),
-        PositionFlag.VALUES, target.getYaw(), target.getPitch());
+        Collections.emptySet(), target.getYaw(), target.getPitch());
   }
 
   @Override
@@ -151,7 +153,7 @@ public class NiceBowlBlock extends BlockWithEntity {
     super.onSteppedOn(world, pos, state, entity);
 
     if (world.isClient
-        || !(entity instanceof PlayerEntity player)
+        || !(entity instanceof ServerPlayerEntity player)
         || !player.isSneaking()
         || !player.getEquippedStack(EquipmentSlot.LEGS).isEmpty()) {
       return;

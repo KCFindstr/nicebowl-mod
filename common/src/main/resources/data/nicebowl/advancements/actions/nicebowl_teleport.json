@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "item": "nicebowl:nicebowl",
+      "nbt": "{\"nicebowl:player_name\":\"none\"}"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.nicebowl_teleport.title"
+    },
+    "description": {
+      "translate": "advancement.nicebowl.nicebowl_teleport.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "nicebowl:actions/receive_nicebowl",
+  "criteria": {
+    "nicebowl_automate": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
