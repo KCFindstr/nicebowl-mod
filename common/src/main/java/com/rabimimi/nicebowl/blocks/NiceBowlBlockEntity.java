@@ -4,11 +4,13 @@ import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -58,6 +60,12 @@ public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.ICont
 
   public Optional<PlayerData> getPlayerData() {
     return playerData;
+  }
+
+  public ItemStack toItemStack() {
+    ItemStack stack = new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
+    copyPlayerDataTo(PlayerData.container(stack));
+    return stack;
   }
   // #endregion PlayerData.IContainer
 }

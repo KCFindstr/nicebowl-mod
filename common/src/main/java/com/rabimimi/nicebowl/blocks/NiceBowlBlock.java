@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.utils.PlayerData;
 
@@ -14,10 +15,15 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
@@ -83,10 +89,9 @@ public class NiceBowlBlock extends BlockWithEntity {
     super.onBreak(world, pos, state, player);
     if (world.isClient)
       return;
-    ItemStack drops = new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
-    if (world.getBlockEntity(pos) instanceof NiceBowlBlockEntity bowl) {
-      bowl.copyPlayerDataTo(PlayerData.container(drops));
-    }
+    ItemStack drops = world.getBlockEntity(pos) instanceof NiceBowlBlockEntity bowl
+        ? bowl.toItemStack()
+        : new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
     dropStack(world, pos, drops);
   }
 
@@ -126,5 +131,41 @@ public class NiceBowlBlock extends BlockWithEntity {
       return ActionResult.SUCCESS;
     }
     return ActionResult.PASS;
+  }
+
+  private void maybeTeleport(ServerWorld world, PlayerEntity player, PlayerData data) {
+    if (data == null || data.isEmpty())
+      return;
+    if (data.uuid().equals(player.getUuid()))
+      return;
+    ServerPlayerEntity target = world.getServer().getPlayerManager().getPlayer(data.uuid());
+    if (target == null || !target.isAlive())
+      return;
+    player.teleport(target.getServerWorld(),
+        target.getX(), target.getY(), target.getZ(),
+        PositionFlag.VALUES, target.getYaw(), target.getPitch());
+  }
+
+  @Override
+  public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
+    super.onSteppedOn(world, pos, state, entity);
+
+    if (world.isClient
+        || !(entity instanceof PlayerEntity player)
+        || !player.isSneaking()
+        || !player.getEquippedStack(EquipmentSlot.LEGS).isEmpty()) {
+      return;
+    }
+    if (!(world.getBlockEntity(pos) instanceof NiceBowlBlockEntity blockEntity)) {
+      NiceBowlMod.LOGGER.warn("NiceBowlBlockEntity not found at {}!", pos);
+      return;
+    }
+    // Equip the player with the item
+    ItemStack bowlStack = blockEntity.toItemStack();
+    player.equipStack(EquipmentSlot.LEGS, bowlStack);
+    if (blockEntity.hasAssociatedPlayer()) {
+      maybeTeleport((ServerWorld) world, player, blockEntity.getPlayerData().get());
+    }
+    world.setBlockState(pos, Blocks.AIR.getDefaultState());
   }
 }
