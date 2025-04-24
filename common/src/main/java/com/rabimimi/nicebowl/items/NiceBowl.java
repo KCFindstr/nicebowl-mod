@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
 import com.rabimimi.nicebowl.blocks.NiceBowlBlock;
+import com.rabimimi.nicebowl.blocks.NiceBowlBlockEntity;
 import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
 
@@ -39,6 +40,11 @@ public class NiceBowl extends ArmorItem {
   @Override
   public boolean isDamageable() {
     return false;
+  }
+
+  @Override
+  public boolean isEnchantable(ItemStack stack) {
+    return stack.getCount() == 1;
   }
 
   @Override
@@ -90,8 +96,9 @@ public class NiceBowl extends ArmorItem {
       NiceBowlBlock nicebowl = BlockRegistry.NICE_BOWL.get();
       BlockState newBlockstate = nicebowl.getDefaultState();
       world.setBlockState(blockpos, newBlockstate, Constants.DEFAULT_AND_RERENDER);
-      if (world.getBlockEntity(blockpos) instanceof PlayerData.IContainer container) {
-        stackPlayerData.copyPlayerDataTo(container);
+      if (world.getBlockEntity(blockpos) instanceof NiceBowlBlockEntity blockEntity) {
+        stackPlayerData.copyPlayerDataTo(blockEntity);
+        blockEntity.setBowlStack(stack);
       } else {
         NiceBowlMod.LOGGER.warn("Created nicebowl block {} does not have a valid entity!", blockpos);
       }
