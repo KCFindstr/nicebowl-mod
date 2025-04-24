@@ -2,12 +2,14 @@ package com.rabimimi.nicebowl.blocks;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.utils.AdvancementUtils;
+import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
 
 import net.minecraft.block.Block;
@@ -42,21 +44,52 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 
 public class NiceBowlBlock extends BlockWithEntity {
+
+  // #region Static fields
   private static final VoxelShape SHAPE = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
   public static final IntProperty LEVEL = IntProperty.of("level", 0, 1);
 
-  public static void appendTooltip(ItemStack itemStack, List<Text> text, String keyNone, String keyPlayer) {
-    var playerDataOptional = PlayerData.container(itemStack).getPlayerData();
+  public static Optional<MutableText> getTooltipText(Optional<PlayerData> playerDataOptional, String keyNone,
+      String keyPlayer) {
     if (playerDataOptional.isEmpty())
-      return;
+      return Optional.empty();
 
     var playerData = playerDataOptional.get();
     MutableText txt = playerData.isEmpty()
         ? Text.translatable(keyNone)
         : Text.translatable(keyPlayer, playerData.name());
     txt = txt.fillStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFF99FF)));
-    text.add(txt);
+    return Optional.of(txt);
   }
+
+  public static Optional<MutableText> getTooltipText(Optional<PlayerData> playerDataOptional) {
+    return getTooltipText(playerDataOptional,
+        Constants.TOOLTIP_NICEBOWL_NONE,
+        Constants.TOOLTIP_NICEBOWL_PLAYER);
+  }
+
+  public static void appendTooltip(Optional<PlayerData> playerDataOptional, List<Text> text, String keyNone,
+      String keyPlayer) {
+    getTooltipText(playerDataOptional, keyNone, keyPlayer).ifPresent(text::add);
+  }
+
+  public static void appendTooltip(Optional<PlayerData> playerDataOptional, List<Text> text) {
+    appendTooltip(playerDataOptional, text,
+        Constants.TOOLTIP_NICEBOWL_NONE,
+        Constants.TOOLTIP_NICEBOWL_PLAYER);
+  }
+
+  public static void appendTooltip(ItemStack itemStack, List<Text> text, String keyNone, String keyPlayer) {
+    appendTooltip(PlayerData.container(itemStack).getPlayerData(), text, keyNone, keyPlayer);
+  }
+
+  public static void appendTooltip(ItemStack itemStack, List<Text> text) {
+    appendTooltip(itemStack, text,
+        Constants.TOOLTIP_NICEBOWL_NONE,
+        Constants.TOOLTIP_NICEBOWL_PLAYER);
+  }
+
+  // #endregion Static fields
 
   public NiceBowlBlock() {
     super(Settings.copy(Blocks.CYAN_WOOL).nonOpaque());
@@ -100,9 +133,7 @@ public class NiceBowlBlock extends BlockWithEntity {
   public void appendTooltip(ItemStack itemStack, @Nullable BlockView reader, List<Text> text,
       TooltipContext tooltip) {
     super.appendTooltip(itemStack, reader, text, tooltip);
-    appendTooltip(itemStack, text,
-        "tooltip.nicebowl.none",
-        "tooltip.nicebowl.player");
+    appendTooltip(itemStack, text);
   }
 
   @Override

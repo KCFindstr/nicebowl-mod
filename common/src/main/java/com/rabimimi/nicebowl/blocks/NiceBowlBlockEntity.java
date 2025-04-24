@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.jetbrains.annotations.Nullable;
 
 import com.rabimimi.nicebowl.items.ItemRegistry;
-import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
@@ -16,6 +16,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.IContainer {
   private Optional<PlayerData> playerData = Optional.empty();
@@ -50,22 +51,40 @@ public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.ICont
   }
 
   // #region PlayerData.IContainer
+  private void syncBlockState() {
+    World world = getWorld();
+    if (world != null && !world.isClient) {
+      int expectedLevel = playerData.isPresent() ? 1 : 0;
+      if (getCachedState().get(NiceBowlBlock.LEVEL) != expectedLevel) {
+        world.setBlockState(pos,
+            getCachedState().with(NiceBowlBlock.LEVEL, expectedLevel),
+            Block.NOTIFY_LISTENERS);
+      }
+    }
+  }
+
+  @Override
   public void setPlayerData(Optional<PlayerData> playerData) {
     this.playerData = playerData;
-    getWorld().setBlockState(pos,
-        getCachedState().with(NiceBowlBlock.LEVEL, playerData.isPresent() ? 1 : 0),
-        Constants.DEFAULT_AND_RERENDER);
+    syncBlockState();
     markDirty();
   }
 
+  @Override
+  public void setWorld(World world) {
+    super.setWorld(world);
+    syncBlockState();
+  }
+
+  @Override
   public Optional<PlayerData> getPlayerData() {
     return playerData;
   }
+  // #endregion PlayerData.IContainer
 
   public ItemStack toItemStack() {
     ItemStack stack = new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
     copyPlayerDataTo(PlayerData.container(stack));
     return stack;
   }
-  // #endregion PlayerData.IContainer
 }

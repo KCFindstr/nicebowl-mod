@@ -1,6 +1,7 @@
 {
   "block.nicebowl.nicebowl_block": "NiceBowl",
   "block.nicebowl.juice_block": "Juice",
+  "config.jade.plugin_nicebowl.nicebowl_block": "NiceBowl",
   "fluid.nicebowl.juice": "Juice",
   "fluid.nicebowl.juice_flow": "Juice",
   "item.nicebowl.nicebowl": "NiceBowl",

@@ -5,6 +5,12 @@ plugins {
 loom {
     forge {
         mixinConfig "nicebowl.mixins.json"
+        runs {
+            client {
+                property 'mixin.env.remapRefMap', 'true'
+                property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            }
+        }
     }
 }
 
@@ -38,6 +44,9 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
+
+    // Jade
+    modImplementation "maven.modrinth:jade:${rootProject.jade_version}+forge"
 }
 
 processResources {

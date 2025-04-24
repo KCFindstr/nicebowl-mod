@@ -20,6 +20,9 @@
     ],
     "client": [
       "com.rabimimi.nicebowl.fabric.client.NiceBowlModFabricClient"
+    ],
+    "jade": [
+      "com.rabimimi.nicebowl.fabric.jade.NiceBowlPlugin"
     ]
   },
   "mixins": [

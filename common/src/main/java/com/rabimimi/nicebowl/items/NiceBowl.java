@@ -45,9 +45,7 @@ public class NiceBowl extends ArmorItem {
   public void appendTooltip(ItemStack itemStack, @Nullable World world, List<Text> text,
       TooltipContext tooltip) {
     super.appendTooltip(itemStack, world, text, tooltip);
-    NiceBowlBlock.appendTooltip(itemStack, text,
-        "tooltip.nicebowl.none",
-        "tooltip.nicebowl.player");
+    NiceBowlBlock.appendTooltip(itemStack, text);
   }
 
   public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity entity) {

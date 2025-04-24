@@ -35,6 +35,9 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+
+    // Jade
+    modImplementation "maven.modrinth:jade:${rootProject.jade_version}+fabric"
 }
 
 processResources {
