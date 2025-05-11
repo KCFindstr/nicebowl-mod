@@ -1,4 +1,4 @@
-package com.rabimimi.nicebowl.forge.client;
+package com.rabimimi.nicebowl.neoforge.client;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.BlockRegistry;

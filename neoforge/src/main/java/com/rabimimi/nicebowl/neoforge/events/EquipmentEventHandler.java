@@ -1,4 +1,4 @@
-package com.rabimimi.nicebowl.forge.events;
+package com.rabimimi.nicebowl.neoforge.events;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.items.NiceBowl;

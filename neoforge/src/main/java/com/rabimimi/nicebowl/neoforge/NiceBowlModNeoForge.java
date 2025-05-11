@@ -1,4 +1,4 @@
-package com.rabimimi.nicebowl.forge;
+package com.rabimimi.nicebowl.neoforge;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 
@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(NiceBowlMod.MOD_ID)
-public final class NiceBowlModForge {
+public final class NiceBowlModNeoForge {
   public NiceBowlModForge(FMLJavaModLoadingContext context) {
     IEventBus modEventBus = context.getModEventBus();
     EventBuses.registerModEventBus(NiceBowlMod.MOD_ID, modEventBus);

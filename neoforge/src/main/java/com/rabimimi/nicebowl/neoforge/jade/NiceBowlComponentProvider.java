@@ -1,4 +1,4 @@
-package com.rabimimi.nicebowl.forge.jade;
+package com.rabimimi.nicebowl.neoforge.jade;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.NiceBowlBlock;
