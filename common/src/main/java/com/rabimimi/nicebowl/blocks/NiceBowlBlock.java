@@ -93,7 +93,11 @@ public class NiceBowlBlock extends BlockWithEntity {
   // #endregion Static fields
 
   public NiceBowlBlock() {
-    super(Settings.copy(Blocks.CYAN_WOOL).nonOpaque());
+    this(Settings.copy(Blocks.CYAN_WOOL).nonOpaque());
+  }
+
+  public NiceBowlBlock(Settings settings) {
+    super(settings);
     this.setDefaultState(this.stateManager.getDefaultState().with(LEVEL, 0));
   }
 
@@ -207,6 +211,6 @@ public class NiceBowlBlock extends BlockWithEntity {
 
   @Override
   protected MapCodec<? extends BlockWithEntity> getCodec() {
-    return null;
+    return createCodec(NiceBowlBlock::new);
   }
 }
