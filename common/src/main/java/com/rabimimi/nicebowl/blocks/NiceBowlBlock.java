@@ -3,9 +3,9 @@ package com.rabimimi.nicebowl.blocks;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import org.jetbrains.annotations.Nullable;
-
+import com.mojang.serialization.MapCodec;
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.items.ItemRegistry;
 import com.rabimimi.nicebowl.utils.AdvancementUtils;
@@ -18,13 +18,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -119,26 +120,27 @@ public class NiceBowlBlock extends BlockWithEntity {
   }
 
   @Override
-  public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-    super.onBreak(world, pos, state, player);
+  public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    BlockState ret = super.onBreak(world, pos, state, player);
     if (world.isClient)
-      return;
+      return ret;
     ItemStack drops = world.getBlockEntity(pos) instanceof NiceBowlBlockEntity bowl
         ? bowl.toItemStack()
         : new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
     dropStack(world, pos, drops);
+    return ret;
   }
 
   @Override
-  public void appendTooltip(ItemStack itemStack, @Nullable BlockView reader, List<Text> text,
-      TooltipContext tooltip) {
-    super.appendTooltip(itemStack, reader, text, tooltip);
+  public void appendTooltip(ItemStack itemStack, TooltipContext context, List<Text> text,
+      TooltipType options) {
+    super.appendTooltip(itemStack, context, text, options);
     appendTooltip(itemStack, text);
   }
 
   @Override
-  public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
-      BlockHitResult hit) {
+  protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    Hand hand = player.getActiveHand();
     ItemStack stack = player.getStackInHand(hand);
     if (!(world.getBlockEntity(pos) instanceof NiceBowlBlockEntity blockEntity)) {
       return ActionResult.PASS;
@@ -166,11 +168,12 @@ public class NiceBowlBlock extends BlockWithEntity {
   }
 
   private void maybeTeleport(ServerWorld world, ServerPlayerEntity player, PlayerData data) {
-    if (data == null || data.isEmpty())
+    if (data == null || data.isEmpty() || data.uuid().isEmpty())
       return;
-    if (data.uuid().equals(player.getUuid()))
+    UUID uuid = data.uuid().get();
+    if (uuid.equals(player.getUuid()))
       return;
-    ServerPlayerEntity target = world.getServer().getPlayerManager().getPlayer(data.uuid());
+    ServerPlayerEntity target = world.getServer().getPlayerManager().getPlayer(uuid);
     if (target == null || !target.isAlive())
       return;
     AdvancementUtils.grantAdvancement(player, AdvancementUtils.NICEBOWL_TELEPORT);
@@ -200,5 +203,10 @@ public class NiceBowlBlock extends BlockWithEntity {
       maybeTeleport((ServerWorld) world, player, blockEntity.getPlayerData().get());
     }
     world.setBlockState(pos, Blocks.AIR.getDefaultState());
+  }
+
+  @Override
+  protected MapCodec<? extends BlockWithEntity> getCodec() {
+    return null;
   }
 }

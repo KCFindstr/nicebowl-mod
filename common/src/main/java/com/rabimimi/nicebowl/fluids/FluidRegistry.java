@@ -20,8 +20,8 @@ public class FluidRegistry {
   public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(
       NiceBowlMod.MOD_ID, RegistryKeys.FLUID);
 
-  private static final Identifier FLUID_STILL = new Identifier(NiceBowlMod.MOD_ID, "block/juice_still");
-  private static final Identifier FLUID_FLOW = new Identifier(NiceBowlMod.MOD_ID, "block/juice_flow");
+  private static final Identifier FLUID_STILL = NiceBowlMod.id("block/juice_still");
+  private static final Identifier FLUID_FLOW = NiceBowlMod.id("block/juice_flow");
 
   public static final RegistrySupplier<FlowableFluid> JUICE = FLUIDS.register("juice",
       () -> new ArchitecturyFlowingFluid.Source(FluidRegistry.JUICE_ATTRIBUTES));

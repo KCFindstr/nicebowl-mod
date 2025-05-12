@@ -20,7 +20,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -84,9 +83,8 @@ public class PlayerEventHandler {
         || amount <= 0) {
       return EventResult.pass();
     }
-    EstrusEffect estrus = EffectRegistry.ESTRUS.get();
-    StatusEffectInstance effect = entity.getStatusEffect(estrus);
-    if (effect != null && estrus.tryHeal(entity.getRandom(), effect.getAmplifier())) {
+    StatusEffectInstance effect = entity.getStatusEffect(EffectRegistry.ESTRUS);
+    if (effect != null && EstrusEffect.tryHeal(entity.getRandom(), effect.getAmplifier())) {
       entity.heal(amount);
       return EventResult.interruptFalse();
     } else {
@@ -113,16 +111,15 @@ public class PlayerEventHandler {
     BlockPos pos = player.getBlockPos();
     BlockState blockState = player.getWorld().getBlockState(pos);
     if (blockState.getBlock() instanceof JuiceBlock) {
-      StatusEffect effect = EffectRegistry.ESTRUS.get();
-      StatusEffectInstance instance = player.getStatusEffect(effect);
+      StatusEffectInstance instance = player.getStatusEffect(EffectRegistry.ESTRUS);
       if (instance == null || instance.getDuration() <= EstrusEffect.EFFECT_INTERVAL) {
-        player.addStatusEffect(new StatusEffectInstance(effect, EstrusEffect.EFFECT_INTERVAL * 2));
+        player.addStatusEffect(new StatusEffectInstance(EffectRegistry.ESTRUS, EstrusEffect.EFFECT_INTERVAL * 2));
       }
     }
   }
 
   public static Optional<Integer> getFogColor(PlayerEntity playerEntity) {
-    if (playerEntity.hasStatusEffect(EffectRegistry.ESTRUS.get())) {
+    if (playerEntity.hasStatusEffect(EffectRegistry.ESTRUS)) {
       return Optional.of(Constants.ESTRUS_COLOR_INT);
     } else {
       return Optional.empty();
@@ -130,7 +127,7 @@ public class PlayerEventHandler {
   }
 
   public static Optional<Float> getFogDensity(PlayerEntity playerEntity) {
-    StatusEffectInstance effect = playerEntity.getStatusEffect(EffectRegistry.ESTRUS.get());
+    StatusEffectInstance effect = playerEntity.getStatusEffect(EffectRegistry.ESTRUS);
     if (effect == null) {
       return Optional.empty();
     } else {

@@ -18,7 +18,7 @@ public class EstrusEffect extends StatusEffect {
     return EFFECT_INTERVAL >> amplifier;
   }
 
-  public boolean tryHeal(Random random, int amplifier) {
+  public static boolean tryHeal(Random random, int amplifier) {
     return random.nextInt(5) <= amplifier;
   }
 
@@ -33,11 +33,12 @@ public class EstrusEffect extends StatusEffect {
   }
 
   @Override
-  public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+  public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
     float remainHealth = entity.getMaxHealth() - entity.getHealth();
     if (remainHealth <= 0) {
-      return;
+      return false;
     }
     entity.heal(1f);
+    return true;
   }
 }

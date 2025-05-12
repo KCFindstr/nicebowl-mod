@@ -11,13 +11,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item.TooltipContext;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public class JuiceBlock extends ArchitecturyLiquidBlock implements BlockEntityProvider {
@@ -31,9 +31,9 @@ public class JuiceBlock extends ArchitecturyLiquidBlock implements BlockEntityPr
   }
 
   @Override
-  public void appendTooltip(ItemStack itemStack, @Nullable BlockView reader, List<Text> text,
-      TooltipContext tooltip) {
-    super.appendTooltip(itemStack, reader, text, tooltip);
+  public void appendTooltip(ItemStack itemStack, TooltipContext context, List<Text> text,
+      TooltipType options) {
+    super.appendTooltip(itemStack, context, text, options);
     NiceBowlBlock.appendTooltip(itemStack, text);
   }
 

@@ -1,6 +1,7 @@
 package com.rabimimi.nicebowl;
 
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
+import com.rabimimi.nicebowl.components.ComponentRegistry;
 import com.rabimimi.nicebowl.events.EventRegistry;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +20,7 @@ public class NiceBowlMod {
   public static final Logger LOGGER = LogManager.getLogger(NiceBowlMod.MOD_ID);
 
   public static Identifier id(String path) {
-    return new Identifier(MOD_ID, path);
+    return Identifier.of(MOD_ID, path);
   }
 
   public static void init() {
@@ -31,6 +32,9 @@ public class NiceBowlMod {
 
     // Register block entities
     BlockEntityRegistry.BLOCK_ENTITIES.register();
+
+    // Register components
+    ComponentRegistry.register();
 
     // Register items
     ItemRegistry.TABS.register();

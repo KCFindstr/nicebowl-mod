@@ -13,13 +13,12 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
-@Mixin(targets = "net.minecraft.screen.PlayerScreenHandler$1")
-public abstract class ClientPlayerScreenHandlerSlotMixin extends Slot {
-  private final EquipmentSlot field_7834;
+@Mixin(net.minecraft.screen.slot.ArmorSlot.class)
+public abstract class ClientScreenArmorSlotMixin extends Slot {
+  private final EquipmentSlot equipmentSlot = EquipmentSlot.LEGS;
 
-  private ClientPlayerScreenHandlerSlotMixin(Inventory inventory, int index, int x, int y) {
+  private ClientScreenArmorSlotMixin(Inventory inventory, int index, int x, int y) {
     super(inventory, index, x, y);
-    this.field_7834 = EquipmentSlot.LEGS;
   }
 
   @Inject(method = "canInsert(Lnet/minecraft/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
@@ -27,17 +26,17 @@ public abstract class ClientPlayerScreenHandlerSlotMixin extends Slot {
     if (!(stack.getItem() instanceof NiceBowl)) {
       return;
     }
-    EquipmentSlot slot = this.field_7834;
+    EquipmentSlot slot = this.equipmentSlot;
     if (slot == EquipmentSlot.HEAD || slot == EquipmentSlot.LEGS) {
       ci.setReturnValue(true);
     }
   }
 
-  @ModifyVariable(method = "setStack(Lnet/minecraft/item/ItemStack;)V", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-  public ItemStack modifySetStack(ItemStack stack) {
+  @ModifyVariable(method = "setStack(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)V", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+  public ItemStack modifySetStack(ItemStack stack, ItemStack previousStack) {
     if (!(stack.getItem() instanceof NiceBowl niceBowl)) {
       return stack;
     }
-    return niceBowl.getEquipable(this.field_7834, stack);
+    return niceBowl.getEquipable(this.equipmentSlot, stack);
   }
 }

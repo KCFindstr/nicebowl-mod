@@ -2,8 +2,6 @@ package com.rabimimi.nicebowl.items;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
 import com.rabimimi.nicebowl.blocks.NiceBowlBlock;
@@ -12,15 +10,16 @@ import com.rabimimi.nicebowl.utils.Constants;
 import com.rabimimi.nicebowl.utils.PlayerData;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -29,17 +28,18 @@ import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 public class NiceBowl extends ArmorItem {
-  public NiceBowl(ArmorMaterial material, Type type, Settings builder) {
+
+  public NiceBowl(RegistryEntry<ArmorMaterial> material, Type type, Settings builder) {
     super(material, type, builder);
   }
 
-  public NiceBowl() {
-    this(NicebowlArmorMaterial.NICEBOWL, Type.LEGGINGS, ItemRegistry.defaultSetting().fireproof());
+  public NiceBowl(Type type) {
+    this(ItemRegistry.NICE_BOWL_ARMOR_MATERIAL, type,
+        ItemRegistry.defaultSetting().fireproof());
   }
 
-  @Override
-  public boolean isDamageable() {
-    return false;
+  public NiceBowl() {
+    this(Type.LEGGINGS);
   }
 
   @Override
@@ -48,33 +48,10 @@ public class NiceBowl extends ArmorItem {
   }
 
   @Override
-  public void appendTooltip(ItemStack itemStack, @Nullable World world, List<Text> text,
-      TooltipContext tooltip) {
-    super.appendTooltip(itemStack, world, text, tooltip);
+  public void appendTooltip(ItemStack itemStack, TooltipContext context, List<Text> text,
+      TooltipType options) {
+    super.appendTooltip(itemStack, context, text, options);
     NiceBowlBlock.appendTooltip(itemStack, text);
-  }
-
-  public boolean canEquip(ItemStack stack, EquipmentSlot armorType, Entity entity) {
-    return armorType == EquipmentSlot.LEGS || armorType == EquipmentSlot.HEAD;
-  }
-
-  public ItemStack getEquipable(EquipmentSlot slot, ItemStack stack) {
-    if (slot == null) {
-      return stack;
-    }
-    Item expectedItem = switch (slot) {
-      case HEAD -> ItemRegistry.NICE_BOWL_HEAD.get();
-      case LEGS -> ItemRegistry.NICE_BOWL.get();
-      default -> null;
-    };
-    if (expectedItem == null || expectedItem.equals(stack.getItem())) {
-      return stack;
-    }
-    ItemStack newStack = new ItemStack(expectedItem, stack.getCount());
-    if (stack.hasNbt()) {
-      newStack.setNbt(stack.getNbt());
-    }
-    return newStack;
   }
 
   @Override
@@ -108,4 +85,26 @@ public class NiceBowl extends ArmorItem {
     }
     return ActionResult.SUCCESS;
   }
+
+  public ItemStack getEquipable(EquipmentSlot slot, ItemStack stack) {
+    if (slot == null) {
+      return stack;
+    }
+    Item expectedItem = switch (slot) {
+      case HEAD -> ItemRegistry.NICE_BOWL_HEAD.get();
+      case LEGS -> ItemRegistry.NICE_BOWL.get();
+      default -> null;
+    };
+    if (expectedItem == null || expectedItem.equals(stack.getItem())) {
+      return stack;
+    }
+    ItemStack newStack = stack.copyComponentsToNewStack(expectedItem, stack.getCount());
+    return newStack;
+  }
+
+  // #region NeoForge IItemExtension
+  public boolean canEquip(ItemStack stack, EquipmentSlot armorType, LivingEntity entity) {
+    return armorType == EquipmentSlot.LEGS || armorType == EquipmentSlot.HEAD;
+  }
+  // #endregion NeoForge IItemExtension
 }

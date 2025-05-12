@@ -2,7 +2,7 @@ package com.rabimimi.nicebowl.utils;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
 
-import net.minecraft.advancement.Advancement;
+import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.advancement.PlayerAdvancementTracker;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,17 +16,11 @@ public class AdvancementUtils {
 
   public static void grantAdvancement(ServerPlayerEntity player, Identifier advancementLoc) {
     var advLoader = player.getServer().getAdvancementLoader();
-    if (advLoader == null) {
-      return;
-    }
-    Advancement advancement = advLoader.get(advancementLoc);
+    AdvancementEntry advancement = advLoader.get(advancementLoc);
     if (advancement == null) {
       return;
     }
     PlayerAdvancementTracker playerAdvancements = player.getAdvancementTracker();
-    if (playerAdvancements == null) {
-      return;
-    }
     AdvancementProgress progress = playerAdvancements.getProgress(advancement);
     if (progress.isDone()) {
       return;

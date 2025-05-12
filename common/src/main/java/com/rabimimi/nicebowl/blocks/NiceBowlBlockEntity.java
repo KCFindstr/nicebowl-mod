@@ -16,6 +16,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.registry.RegistryWrapper.WrapperLookup;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -26,11 +27,11 @@ public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.ICont
   private Optional<PlayerData> playerData = Optional.empty();
   private ItemStack bowlStack = DEFAULT_DROP.copy();
 
-  private void setBowl(@Nullable NbtCompound tag) {
+  private void setBowl(WrapperLookup registryLookup, @Nullable NbtCompound tag) {
     if (tag == null || !tag.contains(NBT_KEY_BOWL_STACK)) {
       bowlStack = DEFAULT_DROP.copy();
     } else {
-      bowlStack = ItemStack.fromNbt(tag.getCompound(NBT_KEY_BOWL_STACK));
+      bowlStack = ItemStack.fromNbt(registryLookup, tag.getCompound(NBT_KEY_BOWL_STACK)).orElseGet(DEFAULT_DROP::copy);
     }
   }
 
@@ -45,26 +46,26 @@ public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.ICont
   }
 
   @Override
-  public NbtCompound toInitialChunkDataNbt() {
+  public NbtCompound toInitialChunkDataNbt(WrapperLookup registryLookup) {
     NbtCompound tag = new NbtCompound();
-    writeNbt(tag);
+    writeNbt(tag, registryLookup);
     return tag;
   }
 
   @Override
-  public void readNbt(NbtCompound tag) {
-    super.readNbt(tag);
-    setBowl(tag);
-    setPlayerData(PlayerData.from(tag));
+  public void readNbt(NbtCompound tag, WrapperLookup registryLookup) {
+    super.readNbt(tag, registryLookup);
+    setBowl(registryLookup, tag);
+    setPlayerData(PlayerData.container(tag).getPlayerData());
   }
 
   @Override
-  protected void writeNbt(NbtCompound tag) {
-    super.writeNbt(tag);
-    PlayerData.saveTo(playerData, tag);
+  protected void writeNbt(NbtCompound tag, WrapperLookup registryLookup) {
+    super.writeNbt(tag, registryLookup);
+    PlayerData.container(tag).setPlayerData(playerData);
     if (bowlStack != null) {
       NbtCompound stackTag = new NbtCompound();
-      bowlStack.writeNbt(stackTag);
+      bowlStack.encode(registryLookup, stackTag);
       tag.put(NBT_KEY_BOWL_STACK, stackTag);
     } else {
       tag.remove(NBT_KEY_BOWL_STACK);

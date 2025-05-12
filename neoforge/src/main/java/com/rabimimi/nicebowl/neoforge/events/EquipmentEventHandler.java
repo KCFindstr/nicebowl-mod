@@ -5,9 +5,9 @@ import com.rabimimi.nicebowl.items.NiceBowl;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 
 @EventBusSubscriber(modid = NiceBowlMod.MOD_ID)
 public class EquipmentEventHandler {

@@ -71,4 +71,8 @@ subprojects {
             // retrieving dependencies.
         }
     }
+
+    loom {
+        accessWidenerPath = project(":common").file("src/main/resources/nicebowl.accesswidener")
+    }
 }

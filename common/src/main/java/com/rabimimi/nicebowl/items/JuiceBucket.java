@@ -2,29 +2,30 @@ package com.rabimimi.nicebowl.items;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.rabimimi.nicebowl.blocks.NiceBowlBlock;
+import com.rabimimi.nicebowl.components.ComponentRegistry;
 import com.rabimimi.nicebowl.fluids.FluidRegistry;
+import com.rabimimi.nicebowl.utils.PlayerData;
 
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
-import net.minecraft.world.World;
 
 public class JuiceBucket extends BucketItem {
   public JuiceBucket() {
     super(
         FluidRegistry.JUICE.get(),
-        ItemRegistry.defaultSetting().recipeRemainder(Items.BUCKET).maxCount(1));
+        ItemRegistry.defaultSetting().recipeRemainder(Items.BUCKET)
+            .component(ComponentRegistry.PLAYER_DATA_COMPONENT.value(), PlayerData.EMPTY)
+            .maxCount(1));
   }
 
   @Override
-  public void appendTooltip(ItemStack itemStack, @Nullable World world, List<Text> text,
-      TooltipContext tooltip) {
-    super.appendTooltip(itemStack, world, text, tooltip);
+  public void appendTooltip(ItemStack itemStack, TooltipContext context, List<Text> text,
+      TooltipType options) {
+    super.appendTooltip(itemStack, context, text, options);
     NiceBowlBlock.appendTooltip(itemStack, text,
         "tooltip.juice_bucket.none",
         "tooltip.juice_bucket.player");
