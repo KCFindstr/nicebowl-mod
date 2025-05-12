@@ -38,7 +38,7 @@ jobs:
       - name: build
         run: ./gradlew build
       - name: copy artifacts to root
-        run: "find './fabric/build/libs' './forge/build/libs'
+        run: "find './fabric/build/libs' './neoforge/build/libs'
           -maxdepth 1
           -name '*.jar'
           ! -name '*-dev-shadow.jar'
