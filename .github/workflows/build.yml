@@ -7,12 +7,12 @@ name: build
 on:
   push:
     branches:
-      - 1.20.1
+      - 1.21.1
     tags:
       - v*.*.*
   pull_request:
     branches:
-      - 1.20.1
+      - 1.21.1
   workflow_dispatch:
 
 jobs:
@@ -20,9 +20,8 @@ jobs:
     strategy:
       matrix:
         # Use these Java versions
-        java: [
-          21, # Current Java LTS
-        ]
+        java:
+          - 21 # Current Java LTS
     runs-on: ubuntu-22.04
     steps:
       - name: checkout repository
@@ -40,17 +39,17 @@ jobs:
         run: ./gradlew build
       - name: copy artifacts to root
         run: "find './fabric/build/libs' './forge/build/libs'
-            -maxdepth 1
-            -name '*.jar'
-            ! -name '*-dev-shadow.jar'
-            ! -name '*-sources.jar'
-            -exec cp -t ./ {} +"
+          -maxdepth 1
+          -name '*.jar'
+          ! -name '*-dev-shadow.jar'
+          ! -name '*-sources.jar'
+          -exec cp -t ./ {} +"
       - name: capture build artifacts
         if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
         uses: actions/upload-artifact@v4
         with:
           name: Built Jars
-          path: '*.jar'
+          path: "*.jar"
       - name: release
         uses: softprops/action-gh-release@v2
         if: github.ref_type == 'tag'
