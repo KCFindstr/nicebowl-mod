@@ -64,4 +64,4 @@ jobs:
           name: Reports
           path: |
             fabric/build/reports/
-            forge/build/reports/
+            neoforge/build/reports/
