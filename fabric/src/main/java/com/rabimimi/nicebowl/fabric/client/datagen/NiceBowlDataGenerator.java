@@ -10,6 +10,8 @@ public class NiceBowlDataGenerator implements DataGeneratorEntrypoint {
     FabricDataGenerator.Pack pack = generator.createPack();
     pack.addProvider(AdvancementsProvider::new);
     pack.addProvider(RecipeProvider::new);
+    pack.addProvider(TagsProvider.FluidProvider::new);
+    pack.addProvider(TagsProvider.BlockProvider::new);
   }
 
 }

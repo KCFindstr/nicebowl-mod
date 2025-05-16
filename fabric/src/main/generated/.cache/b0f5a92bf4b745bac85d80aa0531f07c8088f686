@@ -1,8 +1,8 @@
-// 1.21.1	2025-05-16T02:19:08.0003528	NiceBowl/Advancements
+// 1.21.1	2025-05-16T02:32:35.0718389	NiceBowl/Advancements
 0af412b69fd783efdc382a81264385b2d9458e70 data\nicebowl\advancement\actions\enter_estrus.json
 7ce596b40d2390a5d5c4b49d276898a7de70c15a data\nicebowl\advancement\actions\receive_nicebowl.json
 6132550a9d532f40b30f038ddc9056ea4c843ebe data\nicebowl\advancement\recipes\nicebowl_head.json
-9dad3636461384498f9b86e4b43abcb349b90cc2 data\nicebowl\advancement\root.json
+df35698ab9db86cdb4a578eae4ad932e4dfbc42f data\nicebowl\advancement\root.json
 6f2d7ab667e35bca0defdd8b8db20ee078f83f9f data\nicebowl\advancement\actions\nicebowl_teleport.json
 2eda984ab535e4cb36a68564d6179751268c018b data\nicebowl\advancement\recipes\juice_bucket.json
 f12a2808fd3e137d5c1376d7f0ff5d384dcd1f36 data\nicebowl\advancement\actions\send_nicebowl.json

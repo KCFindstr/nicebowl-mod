@@ -65,8 +65,8 @@ class AdvancementsProvider extends FabricAdvancementProvider {
             Text.translatable("advancement.nicebowl.root.description"),
             NiceBowlMod.id("textures/gui/advancements/background.png"),
             AdvancementFrame.TASK,
-            true,
-            true,
+            false,
+            false,
             false)
         .criterion("has_bowl", InventoryChangedCriterion.Conditions.items(Items.BOWL))
         .criterion("has_the_recipe", RecipeUnlockedCriterion.create(Identifier.of("nicebowl", "nicebowl")))
