@@ -45,6 +45,7 @@ public class PlayerEventHandler {
       var stackPlayerData = PlayerData.container(itemStack);
       stackPlayerData.setPlayerData(PlayerData.from(player));
       player.getInventory().markDirty();
+      AdvancementUtils.grantAdvancement(player, AdvancementUtils.NICEBOWL_OVERNIGHT);
     }
   }
 
@@ -70,7 +71,7 @@ public class PlayerEventHandler {
     }
     PlayerData itemOwner = playerData.get();
     NiceBowlMod.LOGGER.info("Nicebowl is owned by {}" + itemOwner.name());
-    if (!thrower.getUuid().equals(itemOwner.uuid())) {
+    if (!thrower.getUuid().equals(itemOwner.uuid().get())) {
       return;
     }
     AdvancementUtils.grantAdvancement(serverPlayer, AdvancementUtils.RECEIVE_NICEBOWL);

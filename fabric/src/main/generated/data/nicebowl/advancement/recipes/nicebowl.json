@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "nicebowl:nicebowl"
-            ]
+            "items": "nicebowl:nicebowl"
           }
         ]
       },
@@ -19,10 +17,17 @@
       "translate": "advancement.nicebowl.nicebowl.description"
     },
     "icon": {
-      "item": "nicebowl:nicebowl"
+      "count": 1,
+      "id": "nicebowl:nicebowl"
     },
     "title": {
       "translate": "advancement.nicebowl.nicebowl.title"
     }
-  }
+  },
+  "requirements": [
+    [
+      "has_nicebowl"
+    ]
+  ],
+  "sends_telemetry_event": true
 }

@@ -11,10 +11,17 @@
     },
     "frame": "challenge",
     "icon": {
-      "item": "nicebowl:nicebowl"
+      "count": 1,
+      "id": "nicebowl:nicebowl"
     },
     "title": {
       "translate": "advancement.nicebowl.receive_nicebowl.title"
     }
-  }
+  },
+  "requirements": [
+    [
+      "nicebowl_automate"
+    ]
+  ],
+  "sends_telemetry_event": true
 }

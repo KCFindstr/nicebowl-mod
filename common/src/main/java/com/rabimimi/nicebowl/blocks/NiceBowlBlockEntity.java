@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 
 public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.IContainer {
   private static final String NBT_KEY_BOWL_STACK = NiceBowlMod.MOD_ID + ":bowl_stack";
-  private static final ItemStack DEFAULT_DROP = new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
+  private static final ItemStack DEFAULT_DROP = new ItemStack(ItemRegistry.NICE_BOWL, 1);
 
   private Optional<PlayerData> playerData = Optional.empty();
   private ItemStack bowlStack = DEFAULT_DROP.copy();

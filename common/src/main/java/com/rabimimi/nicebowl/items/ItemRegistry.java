@@ -40,10 +40,10 @@ public class ItemRegistry {
   public static final RegistrySupplier<ItemGroup> NICE_BOWL_GROUP = TABS.register(NiceBowlMod.MOD_ID,
       () -> CreativeTabRegistry
           .create(Text.translatable("itemGroup.nicebowl.nicebowl_group"),
-              () -> new ItemStack(ItemRegistry.NICE_BOWL.get())));
+              () -> new ItemStack(ItemRegistry.NICE_BOWL)));
 
-  public static final RegistrySupplier<ArmorItem> NICE_BOWL = ITEMS.register("nicebowl", NiceBowl::new);
-  public static final RegistrySupplier<ArmorItem> NICE_BOWL_HEAD = ITEMS.register("nicebowl_head", NiceBowlHead::new);
+  public static final RegistrySupplier<Item> NICE_BOWL = ITEMS.register("nicebowl", NiceBowl::new);
+  public static final RegistrySupplier<Item> NICE_BOWL_HEAD = ITEMS.register("nicebowl_head", NiceBowlHead::new);
   public static final RegistrySupplier<Item> JUICE_BUCKET = ITEMS.register("juice_bucket", JuiceBucket::new);
   public static final RegistrySupplier<BlockItem> NICE_BOWL_BLOCK = ITEMS.register("nicebowl_block",
       () -> new BlockItem(BlockRegistry.NICE_BOWL.get(), defaultSetting()));

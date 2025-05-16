@@ -130,7 +130,7 @@ public class NiceBowlBlock extends BlockWithEntity {
       return ret;
     ItemStack drops = world.getBlockEntity(pos) instanceof NiceBowlBlockEntity bowl
         ? bowl.toItemStack()
-        : new ItemStack(ItemRegistry.NICE_BOWL.get(), 1);
+        : new ItemStack(ItemRegistry.NICE_BOWL, 1);
     dropStack(world, pos, drops);
     return ret;
   }

@@ -12,11 +12,22 @@
     "frame": "challenge",
     "hidden": true,
     "icon": {
-      "item": "nicebowl:nicebowl",
-      "nbt": "{\"nicebowl:player_name\":\"none\"}"
+      "components": {
+        "nicebowl:player_data": {
+          "nicebowl:player_name": "nicebowl:none"
+        }
+      },
+      "count": 1,
+      "id": "nicebowl:nicebowl"
     },
     "title": {
       "translate": "advancement.nicebowl.send_nicebowl.title"
     }
-  }
+  },
+  "requirements": [
+    [
+      "nicebowl_automate"
+    ]
+  ],
+  "sends_telemetry_event": true
 }

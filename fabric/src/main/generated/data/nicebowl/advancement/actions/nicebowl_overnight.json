@@ -1,0 +1,26 @@
+{
+  "parent": "nicebowl:recipes/nicebowl",
+  "criteria": {
+    "nicebowl_automate": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.nicebowl.nicebowl_overnight.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "nicebowl:nicebowl"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.nicebowl_overnight.title"
+    }
+  },
+  "requirements": [
+    [
+      "nicebowl_automate"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,39 @@
+{
+  "parent": "nicebowl:recipes/juice_bucket",
+  "criteria": {
+    "has_estrus": {
+      "conditions": {
+        "source": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "effects": {
+                "nicebowl:estrus": {}
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.nicebowl.enter_estrus.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "nicebowl:estrus"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.enter_estrus.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_estrus"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

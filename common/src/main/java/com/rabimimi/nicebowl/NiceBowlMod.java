@@ -24,6 +24,9 @@ public class NiceBowlMod {
   }
 
   public static void init() {
+    // Register components
+    ComponentRegistry.COMPONENTS.register();
+
     // Register fluids
     FluidRegistry.FLUIDS.register();
 
@@ -32,9 +35,6 @@ public class NiceBowlMod {
 
     // Register block entities
     BlockEntityRegistry.BLOCK_ENTITIES.register();
-
-    // Register components
-    ComponentRegistry.register();
 
     // Register items
     ItemRegistry.TABS.register();

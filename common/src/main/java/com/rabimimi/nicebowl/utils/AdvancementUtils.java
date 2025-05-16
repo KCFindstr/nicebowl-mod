@@ -13,6 +13,7 @@ public class AdvancementUtils {
   public static final Identifier SEND_NICEBOWL = NiceBowlMod.id("actions/send_nicebowl");
   public static final Identifier BLOCK_PROJECTILE = NiceBowlMod.id("actions/block_projectile");
   public static final Identifier NICEBOWL_TELEPORT = NiceBowlMod.id("actions/nicebowl_teleport");
+  public static final Identifier NICEBOWL_OVERNIGHT = NiceBowlMod.id("actions/nicebowl_overnight");
 
   public static void grantAdvancement(ServerPlayerEntity player, Identifier advancementLoc) {
     var advLoader = player.getServer().getAdvancementLoader();

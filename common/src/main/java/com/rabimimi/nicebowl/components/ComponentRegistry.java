@@ -15,8 +15,4 @@ public class ComponentRegistry {
   public static final RegistryEntry<ComponentType<PlayerData>> PLAYER_DATA_COMPONENT = COMPONENTS.register(
       NiceBowlMod.id("player_data"),
       () -> ComponentType.<PlayerData>builder().codec(PlayerData.CODEC.codec()).build());
-
-  public static void register() {
-    NiceBowlMod.LOGGER.debug("Registering {} components", NiceBowlMod.MOD_ID);
-  }
 }

@@ -9,12 +9,18 @@
     "description": {
       "translate": "advancement.nicebowl.block_projectile.description"
     },
-    "frame": "task",
     "icon": {
-      "item": "minecraft:arrow"
+      "count": 1,
+      "id": "minecraft:arrow"
     },
     "title": {
       "translate": "advancement.nicebowl.block_projectile.title"
     }
-  }
+  },
+  "requirements": [
+    [
+      "nicebowl_automate"
+    ]
+  ],
+  "sends_telemetry_event": true
 }

@@ -19,11 +19,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Uuids;
 
-public record PlayerData(Optional<UUID> uuid, String name) {
+public final class PlayerData {
   // #region Static fields
   private static final String NAME_NONE = "nicebowl:none";
 
-  public static final PlayerData EMPTY = new PlayerData(null, NAME_NONE);
+  public static final PlayerData EMPTY = new PlayerData(Optional.empty(), NAME_NONE);
 
   public static final MapCodec<PlayerData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
       Uuids.CODEC.optionalFieldOf(Constants.NBT_KEY_PLAYER_UID)
@@ -174,6 +174,22 @@ public record PlayerData(Optional<UUID> uuid, String name) {
   // #endregion IContainer
 
   // #region Members
+  public final Optional<UUID> uuid;
+  public final String name;
+
+  private PlayerData(Optional<UUID> uuid, String name) {
+    this.uuid = uuid;
+    this.name = name;
+  }
+
+  public Optional<UUID> uuid() {
+    return uuid;
+  }
+
+  public String name() {
+    return name;
+  }
+
   public boolean isEmpty() {
     return uuid.isEmpty() && name.equals(NAME_NONE);
   }

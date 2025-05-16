@@ -58,3 +58,7 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
 }
+
+fabricApi {
+	configureDataGeneration()
+}

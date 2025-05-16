@@ -23,6 +23,9 @@
     ],
     "jade": [
       "com.rabimimi.nicebowl.fabric.jade.NiceBowlPlugin"
+    ],
+    "fabric-datagen": [
+      "com.rabimimi.nicebowl.fabric.client.datagen.NiceBowlDataGenerator"
     ]
   },
   "mixins": [
