@@ -1,15 +1,4 @@
 {
-  "display": {
-    "icon": {
-      "item": "nicebowl:nicebowl"
-    },
-    "title": {
-      "translate": "advancement.nicebowl.nicebowl_overnight.title"
-    },
-    "description": {
-      "translate": "advancement.nicebowl.nicebowl_overnight.description"
-    }
-  },
   "parent": "nicebowl:recipes/nicebowl",
   "criteria": {
     "sleep_with_nicebowl": {
@@ -22,15 +11,26 @@
             "predicate": {
               "equipment": {
                 "legs": {
-                    "items": [
-                      "nicebowl:nicebowl"
-                    ]
+                  "items": [
+                    "nicebowl:nicebowl"
+                  ]
                 }
               }
             }
           }
         ]
       }
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.nicebowl.nicebowl_overnight.description"
+    },
+    "icon": {
+      "item": "nicebowl:nicebowl"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.nicebowl_overnight.title"
     }
   }
 }

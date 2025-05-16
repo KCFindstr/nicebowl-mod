@@ -1,19 +1,7 @@
 {
-  "display": {
-    "icon": {
-      "item": "nicebowl:nicebowl"
-    },
-    "title": {
-      "translate": "advancement.nicebowl.nicebowl.title"
-    },
-    "description": {
-      "translate": "advancement.nicebowl.nicebowl.description"
-    }
-  },
   "parent": "nicebowl:root",
   "criteria": {
     "has_nicebowl": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -22,7 +10,19 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.nicebowl.nicebowl.description"
+    },
+    "icon": {
+      "item": "nicebowl:nicebowl"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.nicebowl.title"
     }
   }
 }

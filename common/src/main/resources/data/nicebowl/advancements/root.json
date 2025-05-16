@@ -1,19 +1,6 @@
 {
-  "display": {
-    "icon": {
-      "item": "nicebowl:nicebowl"
-    },
-    "title": {
-      "translate": "advancement.nicebowl.root.title"
-    },
-    "description": {
-      "translate": "advancement.nicebowl.root.description"
-    },
-    "background": "nicebowl:textures/gui/advancements/background.png"
-  },
   "criteria": {
     "has_bowl": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -22,13 +9,26 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
     },
     "has_the_recipe": {
       "conditions": {
         "recipe": "nicebowl:nicebowl"
       },
       "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "display": {
+    "background": "nicebowl:textures/gui/advancements/background.png",
+    "description": {
+      "translate": "advancement.nicebowl.root.description"
+    },
+    "icon": {
+      "item": "nicebowl:nicebowl"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.root.title"
     }
   },
   "requirements": [

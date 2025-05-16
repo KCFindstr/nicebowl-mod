@@ -1,20 +1,20 @@
 {
+  "parent": "nicebowl:recipes/nicebowl_head",
+  "criteria": {
+    "nicebowl_automate": {
+      "trigger": "minecraft:impossible"
+    }
+  },
   "display": {
+    "description": {
+      "translate": "advancement.nicebowl.block_projectile.description"
+    },
+    "frame": "task",
     "icon": {
       "item": "minecraft:arrow"
     },
     "title": {
       "translate": "advancement.nicebowl.block_projectile.title"
-    },
-    "description": {
-      "translate": "advancement.nicebowl.block_projectile.description"
-    },
-    "frame": "task"
-  },
-  "parent": "nicebowl:recipes/nicebowl_head",
-  "criteria": {
-    "nicebowl_automate": {
-      "trigger": "minecraft:impossible"
     }
   }
 }

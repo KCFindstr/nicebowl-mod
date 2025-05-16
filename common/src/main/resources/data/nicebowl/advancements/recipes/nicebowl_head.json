@@ -1,19 +1,7 @@
 {
-  "display": {
-    "icon": {
-      "item": "nicebowl:nicebowl_head"
-    },
-    "title": {
-      "translate": "advancement.nicebowl.nicebowl_head.title"
-    },
-    "description": {
-      "translate": "advancement.nicebowl.nicebowl_head.description"
-    }
-  },
   "parent": "nicebowl:recipes/nicebowl",
   "criteria": {
     "has_nicebowl_head": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -22,7 +10,19 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.nicebowl.nicebowl_head.description"
+    },
+    "icon": {
+      "item": "nicebowl:nicebowl_head"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.nicebowl_head.title"
     }
   }
 }

@@ -1,19 +1,7 @@
 {
-  "display": {
-    "icon": {
-      "item": "nicebowl:juice_bucket"
-    },
-    "title": {
-      "translate": "advancement.nicebowl.juice_bucket.title"
-    },
-    "description": {
-      "translate": "advancement.nicebowl.juice_bucket.description"
-    }
-  },
   "parent": "nicebowl:actions/nicebowl_overnight",
   "criteria": {
     "has_juice_bucket": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -22,7 +10,19 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.nicebowl.juice_bucket.description"
+    },
+    "icon": {
+      "item": "nicebowl:juice_bucket"
+    },
+    "title": {
+      "translate": "advancement.nicebowl.juice_bucket.title"
     }
   }
 }

@@ -1,20 +1,20 @@
 {
+  "parent": "nicebowl:recipes/nicebowl",
+  "criteria": {
+    "nicebowl_automate": {
+      "trigger": "minecraft:impossible"
+    }
+  },
   "display": {
+    "description": {
+      "translate": "advancement.nicebowl.receive_nicebowl.description"
+    },
+    "frame": "challenge",
     "icon": {
       "item": "nicebowl:nicebowl"
     },
     "title": {
       "translate": "advancement.nicebowl.receive_nicebowl.title"
-    },
-    "description": {
-      "translate": "advancement.nicebowl.receive_nicebowl.description"
-    },
-    "frame": "challenge"
-  },
-  "parent": "nicebowl:recipes/nicebowl",
-  "criteria": {
-    "nicebowl_automate": {
-      "trigger": "minecraft:impossible"
     }
   }
 }
