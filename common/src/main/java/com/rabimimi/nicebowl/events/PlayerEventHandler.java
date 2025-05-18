@@ -33,7 +33,7 @@ public class PlayerEventHandler {
 
   public static void init() {
     PlayerEvent.PICKUP_ITEM_POST.register(PlayerEventHandler::onItemPickupPost);
-    // TickEvent.PLAYER_PRE.register(PlayerEventHandler::onPlayerTickPre);
+    TickEvent.PLAYER_PRE.register(PlayerEventHandler::onPlayerTickPre);
     EntityEvent.LIVING_HURT.register(PlayerEventHandler::onLivingHurt);
     PLAYER_WAKE_UP_SKIP_NIGHT.register(PlayerEventHandler::onWakeUpSkipNight);
   }
@@ -114,10 +114,8 @@ public class PlayerEventHandler {
     if (blockState.getBlock() instanceof JuiceBlock) {
       StatusEffectInstance instance = player.getStatusEffect(EffectRegistry.ESTRUS);
       if (instance == null || instance.getDuration() <= EstrusEffect.EFFECT_INTERVAL) {
-        NiceBowlMod.LOGGER.info("Adding ESTRUS effect to player {}",
-            player.getDisplayName().getString());
-        // player.addStatusEffect(new StatusEffectInstance(EffectRegistry.ESTRUS,
-        // EstrusEffect.EFFECT_INTERVAL * 2));
+        player.addStatusEffect(new StatusEffectInstance(EffectRegistry.ESTRUS,
+            EstrusEffect.EFFECT_INTERVAL * 2));
       }
     }
   }

@@ -36,9 +36,9 @@ public class EstrusEffect extends StatusEffect {
   public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
     float remainHealth = entity.getMaxHealth() - entity.getHealth();
     if (remainHealth <= 0) {
-      return false;
+      return true;
     }
     entity.heal(1f);
-    return super.applyUpdateEffect(entity, amplifier);
+    return true;
   }
 }
