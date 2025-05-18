@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -48,8 +47,8 @@ public class ItemRegistry {
   public static final RegistrySupplier<BlockItem> NICE_BOWL_BLOCK = ITEMS.register("nicebowl_block",
       () -> new BlockItem(BlockRegistry.NICE_BOWL.get(), defaultSetting()));
 
-  public static final RegistryEntry<ArmorMaterial> NICE_BOWL_ARMOR_MATERIAL = ARMOR_MATERIALS.register(
-      NiceBowlMod.id("nicebowl_armor"),
+  public static final RegistrySupplier<ArmorMaterial> NICE_BOWL_ARMOR_MATERIAL = ARMOR_MATERIALS.register(
+      NiceBowlMod.id("nicebowl"),
       () -> new ArmorMaterial(
           Map.of(
               ArmorItem.Type.HELMET, 2,
@@ -61,7 +60,7 @@ public class ItemRegistry {
           SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
           () -> Ingredient.ofItems(Items.WHITE_WOOL, Items.LIGHT_BLUE_WOOL),
           List.<ArmorMaterial.Layer>of(
-              new ArmorMaterial.Layer(NiceBowlMod.id("nicebowl_armor"), "", false)),
+              new ArmorMaterial.Layer(NiceBowlMod.id("nicebowl"), "", false)),
           0.0F,
           1.0F));
 

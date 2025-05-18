@@ -39,6 +39,7 @@ public class NiceBowlMod {
     // Register items
     ItemRegistry.TABS.register();
     ItemRegistry.ITEMS.register();
+    ItemRegistry.ARMOR_MATERIALS.register();
 
     // Register effects
     EffectRegistry.EFFECTS.register();

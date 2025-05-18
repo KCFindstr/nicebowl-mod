@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Uuids;
 
-public final class PlayerData {
+public record PlayerData(Optional<UUID> uuid, String name) {
   // #region Static fields
   private static final String NAME_NONE = "nicebowl:none";
 
@@ -174,22 +174,6 @@ public final class PlayerData {
   // #endregion IContainer
 
   // #region Members
-  public final Optional<UUID> uuid;
-  public final String name;
-
-  private PlayerData(Optional<UUID> uuid, String name) {
-    this.uuid = uuid;
-    this.name = name;
-  }
-
-  public Optional<UUID> uuid() {
-    return uuid;
-  }
-
-  public String name() {
-    return name;
-  }
-
   public boolean isEmpty() {
     return uuid.isEmpty() && name.equals(NAME_NONE);
   }

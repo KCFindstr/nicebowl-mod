@@ -115,7 +115,7 @@ public class NiceBowlBlock extends BlockWithEntity {
 
   @Override
   public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-    return new NiceBowlBlockEntity(pos, state);
+    return NiceBowlBlockEntity.newBowl(pos, state);
   }
 
   @Override

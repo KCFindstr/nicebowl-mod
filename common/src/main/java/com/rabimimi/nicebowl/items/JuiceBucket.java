@@ -7,16 +7,16 @@ import com.rabimimi.nicebowl.components.ComponentRegistry;
 import com.rabimimi.nicebowl.fluids.FluidRegistry;
 import com.rabimimi.nicebowl.utils.PlayerData;
 
-import net.minecraft.item.BucketItem;
+import dev.architectury.core.item.ArchitecturyBucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 
-public class JuiceBucket extends BucketItem {
+public class JuiceBucket extends ArchitecturyBucketItem {
   public JuiceBucket() {
     super(
-        FluidRegistry.JUICE.get(),
+        FluidRegistry.JUICE,
         ItemRegistry.defaultSetting().recipeRemainder(Items.BUCKET)
             .component(ComponentRegistry.PLAYER_DATA_COMPONENT.value(), PlayerData.EMPTY)
             .maxCount(1));

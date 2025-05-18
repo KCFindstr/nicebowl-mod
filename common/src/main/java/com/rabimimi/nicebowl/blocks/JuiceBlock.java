@@ -27,7 +27,7 @@ public class JuiceBlock extends ArchitecturyLiquidBlock implements BlockEntityPr
 
   @Override
   public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-    return new NiceBowlBlockEntity(pos, state);
+    return NiceBowlBlockEntity.newJuice(pos, state);
   }
 
   @Override

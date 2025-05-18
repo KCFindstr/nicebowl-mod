@@ -15,10 +15,11 @@ import net.minecraft.screen.slot.Slot;
 
 @Mixin(net.minecraft.screen.slot.ArmorSlot.class)
 public abstract class ClientScreenArmorSlotMixin extends Slot {
-  private final EquipmentSlot equipmentSlot = EquipmentSlot.LEGS;
+  private final EquipmentSlot equipmentSlot;
 
   private ClientScreenArmorSlotMixin(Inventory inventory, int index, int x, int y) {
     super(inventory, index, x, y);
+    this.equipmentSlot = EquipmentSlot.LEGS;
   }
 
   @Inject(method = "canInsert(Lnet/minecraft/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)

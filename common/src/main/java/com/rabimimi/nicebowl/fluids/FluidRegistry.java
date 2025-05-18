@@ -1,5 +1,7 @@
 package com.rabimimi.nicebowl.fluids;
 
+import java.util.List;
+
 import com.rabimimi.nicebowl.NiceBowlMod;
 import com.rabimimi.nicebowl.blocks.BlockRegistry;
 import com.rabimimi.nicebowl.items.ItemRegistry;
@@ -22,15 +24,14 @@ public class FluidRegistry {
 
   private static final Identifier FLUID_STILL = NiceBowlMod.id("block/juice_still");
   private static final Identifier FLUID_FLOW = NiceBowlMod.id("block/juice_flow");
-
   public static final RegistrySupplier<FlowableFluid> JUICE = FLUIDS.register("juice",
       () -> new ArchitecturyFlowingFluid.Source(FluidRegistry.JUICE_ATTRIBUTES));
   public static final RegistrySupplier<FlowableFluid> FLOWING_JUICE = FLUIDS.register("flowing_juice",
       () -> new ArchitecturyFlowingFluid.Flowing(FluidRegistry.JUICE_ATTRIBUTES));
 
-  public static final ArchitecturyFluidAttributes JUICE_ATTRIBUTES = SimpleArchitecturyFluidAttributes.ofSupplier(
-      () -> FLOWING_JUICE,
-      () -> JUICE)
+  public static final ArchitecturyFluidAttributes JUICE_ATTRIBUTES = SimpleArchitecturyFluidAttributes.of(
+      FLOWING_JUICE,
+      JUICE)
       .sourceTexture(FLUID_STILL)
       .flowingTexture(FLUID_FLOW)
       .bucketItem(ItemRegistry.JUICE_BUCKET)
@@ -39,6 +40,8 @@ public class FluidRegistry {
       .rarity(Rarity.UNCOMMON)
       .viscosity(2000)
       .temperature(310)
-      .convertToSource(false)
-      .block(BlockRegistry.JUICE);
+      .convertToSource(false);
+
+  public static final List<ArchitecturyFluidAttributes> ALL_FLUIDS = List.of(
+      JUICE_ATTRIBUTES);
 }

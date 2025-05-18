@@ -2,6 +2,7 @@ package com.rabimimi.nicebowl.blocks;
 
 import java.util.Optional;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.rabimimi.nicebowl.NiceBowlMod;
@@ -11,6 +12,7 @@ import com.rabimimi.nicebowl.utils.PlayerData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
@@ -25,18 +27,26 @@ public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.ICont
   private static final ItemStack DEFAULT_DROP = new ItemStack(ItemRegistry.NICE_BOWL, 1);
 
   private Optional<PlayerData> playerData = Optional.empty();
-  private ItemStack bowlStack = DEFAULT_DROP.copy();
+  private @NotNull ItemStack bowlStack = DEFAULT_DROP.copy();
 
   private void setBowl(WrapperLookup registryLookup, @Nullable NbtCompound tag) {
     if (tag == null || !tag.contains(NBT_KEY_BOWL_STACK)) {
       bowlStack = DEFAULT_DROP.copy();
-    } else {
-      bowlStack = ItemStack.fromNbt(registryLookup, tag.getCompound(NBT_KEY_BOWL_STACK)).orElseGet(DEFAULT_DROP::copy);
+      return;
     }
+    bowlStack = ItemStack.fromNbt(registryLookup, tag.getCompound(NBT_KEY_BOWL_STACK)).orElseGet(DEFAULT_DROP::copy);
   }
 
-  public NiceBowlBlockEntity(BlockPos pos, BlockState state) {
-    super(BlockEntityRegistry.NICE_BOWL_BLOCK_ENTITY.get(), pos, state);
+  private NiceBowlBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    super(type, pos, state);
+  }
+
+  public static NiceBowlBlockEntity newBowl(BlockPos pos, BlockState state) {
+    return new NiceBowlBlockEntity(BlockEntityRegistry.NICE_BOWL_BLOCK_ENTITY.get(), pos, state);
+  }
+
+  public static NiceBowlBlockEntity newJuice(BlockPos pos, BlockState state) {
+    return new NiceBowlBlockEntity(BlockEntityRegistry.JUICE_BLOCK_ENTITY.get(), pos, state);
   }
 
   @Nullable
@@ -63,12 +73,10 @@ public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.ICont
   protected void writeNbt(NbtCompound tag, WrapperLookup registryLookup) {
     super.writeNbt(tag, registryLookup);
     PlayerData.container(tag).setPlayerData(playerData);
-    if (bowlStack != null) {
-      NbtCompound stackTag = new NbtCompound();
-      bowlStack.encode(registryLookup, stackTag);
-      tag.put(NBT_KEY_BOWL_STACK, stackTag);
-    } else {
+    if (bowlStack.isEmpty()) {
       tag.remove(NBT_KEY_BOWL_STACK);
+    } else {
+      tag.put(NBT_KEY_BOWL_STACK, bowlStack.encode(registryLookup));
     }
   }
 

@@ -39,6 +39,6 @@ public class EstrusEffect extends StatusEffect {
       return false;
     }
     entity.heal(1f);
-    return true;
+    return super.applyUpdateEffect(entity, amplifier);
   }
 }
