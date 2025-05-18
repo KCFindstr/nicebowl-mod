@@ -15,6 +15,7 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.event.events.common.TickEvent;
+import dev.architectury.platform.Platform;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
@@ -32,7 +33,10 @@ public class PlayerEventHandler {
   public static final RabiEvent<ServerPlayerEntity> PLAYER_WAKE_UP_SKIP_NIGHT = new RabiEvent<>();
 
   public static void init() {
-    PlayerEvent.PICKUP_ITEM_POST.register(PlayerEventHandler::onItemPickupPost);
+    if (Platform.isFabric()) {
+      // Will pick up air in NeoForge -_-
+      PlayerEvent.PICKUP_ITEM_POST.register(PlayerEventHandler::onItemPickupPost);
+    }
     TickEvent.PLAYER_PRE.register(PlayerEventHandler::onPlayerTickPre);
     EntityEvent.LIVING_HURT.register(PlayerEventHandler::onLivingHurt);
     PLAYER_WAKE_UP_SKIP_NIGHT.register(PlayerEventHandler::onWakeUpSkipNight);
@@ -49,7 +53,7 @@ public class PlayerEventHandler {
     }
   }
 
-  private static void onItemPickupPost(PlayerEntity player, ItemEntity itemEntity, ItemStack stack) {
+  public static void onItemPickupPost(PlayerEntity player, ItemEntity itemEntity, ItemStack stack) {
     if (!(player instanceof ServerPlayerEntity serverPlayer)) {
       return;
     }
@@ -84,7 +88,7 @@ public class PlayerEventHandler {
         || amount <= 0) {
       return EventResult.pass();
     }
-    StatusEffectInstance effect = entity.getStatusEffect(EffectRegistry.ESTRUS);
+    StatusEffectInstance effect = entity.getStatusEffect(EffectRegistry.ESTRUS.get());
     if (effect != null && EstrusEffect.tryHeal(entity.getRandom(), effect.getAmplifier())) {
       entity.heal(amount);
       return EventResult.interruptFalse();
@@ -112,16 +116,16 @@ public class PlayerEventHandler {
     BlockPos pos = player.getBlockPos();
     BlockState blockState = player.getWorld().getBlockState(pos);
     if (blockState.getBlock() instanceof JuiceBlock) {
-      StatusEffectInstance instance = player.getStatusEffect(EffectRegistry.ESTRUS);
+      StatusEffectInstance instance = player.getStatusEffect(EffectRegistry.ESTRUS.get());
       if (instance == null || instance.getDuration() <= EstrusEffect.EFFECT_INTERVAL) {
-        player.addStatusEffect(new StatusEffectInstance(EffectRegistry.ESTRUS,
+        player.addStatusEffect(new StatusEffectInstance(EffectRegistry.ESTRUS.get(),
             EstrusEffect.EFFECT_INTERVAL * 2));
       }
     }
   }
 
   public static Optional<Integer> getFogColor(PlayerEntity playerEntity) {
-    if (playerEntity.hasStatusEffect(EffectRegistry.ESTRUS)) {
+    if (playerEntity.hasStatusEffect(EffectRegistry.ESTRUS.get())) {
       return Optional.of(Constants.ESTRUS_COLOR_INT);
     } else {
       return Optional.empty();
@@ -129,7 +133,7 @@ public class PlayerEventHandler {
   }
 
   public static Optional<Float> getFogDensity(PlayerEntity playerEntity) {
-    StatusEffectInstance effect = playerEntity.getStatusEffect(EffectRegistry.ESTRUS);
+    StatusEffectInstance effect = playerEntity.getStatusEffect(EffectRegistry.ESTRUS.get());
     if (effect == null) {
       return Optional.empty();
     } else {

@@ -11,7 +11,6 @@ import com.rabimimi.nicebowl.potions.EffectRegistry;
 import com.rabimimi.nicebowl.utils.AdvancementUtils;
 import com.rabimimi.nicebowl.utils.PlayerData;
 
-import dev.architectury.registry.registries.DeferredSupplier;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancement.Advancement;
@@ -24,11 +23,9 @@ import net.minecraft.advancement.criterion.EffectsChangedCriterion;
 import net.minecraft.advancement.criterion.ImpossibleCriterion;
 import net.minecraft.advancement.criterion.InventoryChangedCriterion;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityEffectPredicate;
-import net.minecraft.predicate.entity.EntityPredicate;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
@@ -195,9 +192,9 @@ class AdvancementsProvider extends FabricAdvancementProvider {
   private void createEnterEstrusAdvancement(Consumer<AdvancementEntry> consumer, AdvancementEntry parent,
       RegistryWrapper.WrapperLookup registryLookup) {
     var estrusEffect = registryLookup.createRegistryLookup().getOrThrow(RegistryKeys.STATUS_EFFECT)
-        .getOrThrow(((DeferredSupplier<StatusEffect>) EffectRegistry.ESTRUS).getKey());
-    var entityPredicateBuilder = EntityPredicate.Builder.create().effects(
-        EntityEffectPredicate.Builder.create().addEffect(estrusEffect));
+        .getOrThrow(EffectRegistry.ESTRUS.get().getKey().get());
+    var entityEffectPredicate = EntityEffectPredicate.Builder.create()
+        .addEffect(estrusEffect);
 
     Advancement.Builder.create().parent(parent)
         .display(
@@ -207,7 +204,7 @@ class AdvancementsProvider extends FabricAdvancementProvider {
             null,
             AdvancementFrame.TASK,
             true, true, false)
-        .criterion("has_estrus", EffectsChangedCriterion.Conditions.create(entityPredicateBuilder))
+        .criterion("has_estrus", EffectsChangedCriterion.Conditions.create(entityEffectPredicate))
         .build(consumer, "nicebowl:actions/enter_estrus");
   }
 }

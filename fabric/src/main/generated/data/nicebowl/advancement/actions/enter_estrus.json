@@ -3,17 +3,9 @@
   "criteria": {
     "has_estrus": {
       "conditions": {
-        "source": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "effects": {
-                "nicebowl:estrus": {}
-              }
-            }
-          }
-        ]
+        "effects": {
+          "nicebowl:estrus": {}
+        }
       },
       "trigger": "minecraft:effects_changed"
     }
