@@ -13,16 +13,19 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper.WrapperLookup;
+import net.minecraft.text.Text;
+import net.minecraft.util.Nameable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.IContainer {
+public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.IContainer, Nameable {
   private static final String NBT_KEY_BOWL_STACK = NiceBowlMod.MOD_ID + ":bowl_stack";
   private static final ItemStack DEFAULT_DROP = new ItemStack(ItemRegistry.NICE_BOWL, 1);
 
@@ -124,6 +127,21 @@ public class NiceBowlBlockEntity extends BlockEntity implements PlayerData.ICont
     return playerData;
   }
   // #endregion PlayerData.IContainer
+
+  // #region Nameable
+  @Override
+  public Text getName() {
+    return Optional.ofNullable(getCustomName())
+        .orElseGet(() -> getCachedState().getBlock().getName());
+  }
+
+  @Nullable
+  @Override
+  public Text getCustomName() {
+    return bowlStack.getOrDefault(DataComponentTypes.CUSTOM_NAME, null);
+  }
+
+  // #endregion Nameable
 
   public ItemStack toItemStack() {
     copyPlayerDataTo(PlayerData.container(bowlStack));
